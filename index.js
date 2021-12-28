@@ -32,8 +32,6 @@ const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 
 client.once('ready', async () => {
     console.log('Ready!')
-	let test = await client.application.commands.fetch()
-	console.log(test)
 });
 for (const file of commandFiles) {
     let command = require(`./commands/${file}`);
