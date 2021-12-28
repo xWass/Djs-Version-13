@@ -11,14 +11,36 @@ for (const file of commandFiles) {
     client.commands.set(command.data.name, command);
 }
 
-const commands = [];
+const { REST } = require('@discordjs/rest');
+const { Routes } = require('discord-api-types/v9');
+const fs = require('fs');
 
-client.once('ready', async () => {
-	let one = client.guilds.cache.get(guildId)
-    console.log('Started refreshing application (/) commands.');
-	await client.application.commands.set(commands);
-	// await one.commands.set(commands);
-    console.log('Successfully reloaded application (/) commands.');
+const commands = [];
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	commands.push(command.data.toJSON());
+}
+require("dotenv").config();
+const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
+
+(async () => {
+	try {
+		console.log('Started refreshing application (/) commands.');
+
+		await rest.put(
+			Routes.applicationGuildCommands(clientId),
+			{ body: commands },
+		);
+
+		console.log('Successfully reloaded application (/) commands.');
+	} catch (error) {
+		console.error(error);
+	}
+})();
+
+client.once('ready', () => {
     console.log('Ready!')
 });
 

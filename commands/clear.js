@@ -42,47 +42,39 @@ module.exports = {
                     .setLabel('Cancel')
                     .setStyle('DANGER')
             );
-
         await interaction.reply({
             content: `Are you sure you want to clear ${amount} messages?`,
             components: [row],
             ephemeral: true
         });
-
         const response = await interaction.channel
             .awaitMessageComponent({
                 filter: (i) => {
                     const isInteractionUser = i.user.id === interaction.user.id;
-
                     if (!isInteractionUser) {
                         i.followUp({
                             content: "You can't use this!",
                             ephemeral: true
                         });
-
                         return false;
                     }
-
+                    row.components[0].setDisabled(true);
+                    row.components[1].setDisabled(true);
                     return i.customId === 'yes' || i.customId === 'no';
                 },
                 time: 15000
-                
             })
             .catch(() => null);
-        
         if (response === null)
             return void (await interaction.followUp({
                 content: 'Time out! Operation cancelled.',
                 ephemeral: true
             }));
-
         row.components[0].setDisabled(true);
         row.components[1].setDisabled(true);
-        
         await response.update({
-          components: [row]
+            components: [row]
         });
-        
         if (response.customId === 'yes') {
             await interaction.channel.bulkDelete(amount);
 
