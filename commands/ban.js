@@ -11,7 +11,7 @@ module.exports = {
 		const user = interaction.options.getUser('user');
 		const mem = interaction.options.getMember('user');
 
-		if (!interaction.member.permissions.has([Permissions.FLAGS.ban_MEMBERS])) {
+		if (!interaction.member.permissions.has([Permissions.FLAGS.BAN_MEMBERS])) {
 			interaction.reply({
 				content: "You do not have the `BAN_MEMBERS` permission.",
 				ephemeral: true,
@@ -19,7 +19,7 @@ module.exports = {
 			return;
 		}
 		let guild = interaction.guild
-		if (!guild.me.permissions.has([Permissions.FLAGS.ban_MEMBERS])) {
+		if (!guild.me.permissions.has([Permissions.FLAGS.BAN_MEMBERS])) {
 			interaction.reply({
 				content: "I do not have the `BAN_MEMBERS` permission.",
 				ephemeral: false,
