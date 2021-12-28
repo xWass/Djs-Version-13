@@ -17,6 +17,7 @@ client.once('ready', async () => {
 	let one = client.guilds.cache.get(guildId)
     console.log('Started refreshing application (/) commands.');
 	await client.application.commands.set(commands);
+	// await one.commands.set(commands);
     console.log('Successfully reloaded application (/) commands.');
     console.log('Ready!')
 });
