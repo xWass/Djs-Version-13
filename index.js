@@ -6,14 +6,9 @@ client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 const { clientId, guildId } = require('./config.json');
 
-for (const file of commandFiles) {
-    let command = require(`./commands/${file}`);
-    client.commands.set(command.data.name, command);
-}
 
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
-const fs = require('fs');
 
 const commands = [];
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -30,7 +25,7 @@ const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 		console.log('Started refreshing application (/) commands.');
 
 		await rest.put(
-			Routes.applicationGuildCommands(clientId),
+			Routes.applicationGuildCommands(clientId, guildId),
 			{ body: commands },
 		);
 
@@ -43,7 +38,10 @@ const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 client.once('ready', () => {
     console.log('Ready!')
 });
-
+for (const file of commandFiles) {
+    let command = require(`./commands/${file}`);
+    client.commands.set(command.data.name, command);
+}
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
 
