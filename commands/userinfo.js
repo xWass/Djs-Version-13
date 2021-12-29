@@ -5,6 +5,9 @@ module.exports = {
 		.setName('user-info')
 		.setDescription('Display info about yourself.'),
 	async execute(interaction) {
-		return interaction.reply(`Your username: ${interaction.user.username}\nYour ID: ${interaction.user.id}`);
+		interaction.followUp({
+			content: `Your username: ${interaction.user.username} \nYour ID: ${interaction.user.id} \nAccount creation date: ${interaction.user.createdAt}`,
+			ephemeral: false
+		});
 	},
 };
