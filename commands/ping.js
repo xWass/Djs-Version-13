@@ -5,6 +5,6 @@ module.exports = {
 		.setName('ping')
 		.setDescription('Replies with ping!'),
 	async execute(interaction) {
-		return interaction.reply(`Pong! ${client.ws.ping}ms.`);
+		interaction.reply(`Pong! ${client.ws.ping}ms.`);
 	},
 };
