@@ -92,11 +92,40 @@ module.exports = {
             components: [row]
         });
         if (response.customId === 'yes') {
-            await interaction.guild.members.ban(user.id)
-            await interaction.followUp({
-                content: `${user} banned.`,
-                ephemeral: false
-            });
+            if (inv === null) {
+                await interaction.guild.members.ban(user.id)
+                await interaction.guild.members.unban(user.id)
+                await interaction.followUp({
+                    content: `${user} soft-banned.`,
+                    ephemeral: false
+                });
+            } else if (inv === "y") {
+                // await send invite here
+                await interaction.guild.members.ban(user.id)
+                await interaction.guild.members.unban(user.id)
+                await interaction.followUp({
+                    content: `${user} soft-banned and re-invited`,
+                    ephemeral: false
+                });
+                return;
+            } else if (inv === "n") {
+                await interaction.guild.members.ban(user.id)
+                await interaction.guild.members.unban(user.id)
+                await interaction.followUp({
+                    content: `${user} soft-banned, not re-invited.`,
+                    ephemeral: false
+                });
+                return;
+            } else {
+                await interaction.guild.members.ban(user.id)
+                await interaction.guild.members.unban(user.id)
+                await interaction.followUp({
+                    content: `${user} soft-banned, not re-invited.`,
+                    ephemeral: false
+                });
+                return;
+
+            }
         } else
             await interaction.followUp({
                 content: 'Cancelled!',
