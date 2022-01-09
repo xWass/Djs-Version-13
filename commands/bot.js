@@ -2,11 +2,10 @@ const {
     SlashCommandBuilder
 } = require('@discordjs/builders');
 const { Client } = require('discord.js');
-require("moment-duration-format");
-const moment = require("moment");
-const duration = moment
-.duration(Client.uptime)
-.format(" D[d], H[h], m[m]");
+let days = Math.floor(client.uptime / 86400000);
+let hours = Math.floor(client.uptime / 3600000) % 24;
+let minutes = Math.floor(client.uptime / 60000) % 60;
+let seconds = Math.floor(client.uptime / 1000) % 60;
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -14,7 +13,7 @@ module.exports = {
 		.setDescription('View bot information.'),
     async execute(interaction) {
         await interaction.reply({
-            content: `Ping: ${interaction.client.ws.ping}ms \nUptime: ${duration} \nMemory: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}mb`,
+            content: `Ping: ${interaction.client.ws.ping}ms \nUptime: ${days}d ${hours}h ${minutes}m ${seconds}s \nMemory: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}mb`,
             components: null,
             ephemeral: true
         });
