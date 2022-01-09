@@ -14,7 +14,7 @@ module.exports = {
 		.setDescription('View bot information.'),
     async execute(interaction) {
         await interaction.reply({
-            content: `Ping: ${Client.ws.ping}ms \nUptime: ${duration} \nMemory: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}mb`,
+            content: `Ping: ${interaction.client.ws.ping}ms \nUptime: ${duration} \nMemory: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}mb`,
             components: null,
             ephemeral: true
         });
