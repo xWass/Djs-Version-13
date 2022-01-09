@@ -1,11 +1,11 @@
 const {
     SlashCommandBuilder
 } = require('@discordjs/builders');
-const { Client, client } = require('discord.js');
-let days = Math.floor(client.uptime / 86400000);
-let hours = Math.floor(client.uptime / 3600000) % 24;
-let minutes = Math.floor(client.uptime / 60000) % 60;
-let seconds = Math.floor(client.uptime / 1000) % 60;
+const { Client } = require('discord.js');
+let days = Math.floor(interaction.client.uptime / 86400000);
+let hours = Math.floor(interaction.client.uptime / 3600000) % 24;
+let minutes = Math.floor(interaction.client.uptime / 60000) % 60;
+let seconds = Math.floor(interaction.client.uptime / 1000) % 60;
 
 module.exports = {
 	data: new SlashCommandBuilder()
