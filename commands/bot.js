@@ -5,7 +5,7 @@ const { Client } = require('discord.js');
 require("moment-duration-format");
 const moment = require("moment");
 const duration = moment
-.duration(client.uptime)
+.duration(Client.uptime)
 .format(" D[d], H[h], m[m]");
 
 module.exports = {
