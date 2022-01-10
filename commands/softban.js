@@ -95,7 +95,9 @@ module.exports = {
 
         if (response.customId === 'yes') {
             if (inv === null) {
-                await interaction.guild.members.ban(user.id, {7})
+                await interaction.guild.members.ban(user.id, {
+                    days: 7
+                })
                 await interaction.guild.bans.remove(user.id)
                 await interaction.followUp({
                     content: `${user} soft-banned.`,
@@ -111,7 +113,9 @@ module.exports = {
                     content: `You were softbanned. Heres an invite back: ${invite}`,
                     ephemeral: false
                 })
-                await interaction.guild.members.ban(user.id, {7})
+                await interaction.guild.members.ban(user.id, {
+                    days: 7
+                })
                 await interaction.guild.bans.remove(user.id)
                 await interaction.followUp({
                     content: `${user} soft-banned and re-invited`,
@@ -119,7 +123,9 @@ module.exports = {
                 });
                 return;
             } else if (inv === "n") {
-                await interaction.guild.members.ban(user.id, {7})
+                await interaction.guild.members.ban(user.id, {
+                    days: 7
+                })
                 await interaction.guild.bans.remove(user.id)
                 await interaction.followUp({
                     content: `${user} soft-banned, not re-invited.`,
@@ -127,7 +133,9 @@ module.exports = {
                 });
                 return;
             } else {
-                await interaction.guild.members.ban(user.id, {7})
+                await interaction.guild.members.ban(user.id, {
+                    days: 7
+                })
                 await interaction.guild.bans.remove(user.id)
                 await interaction.followUp({
                     content: `${user} soft-banned, not re-invited.`,
