@@ -103,7 +103,7 @@ module.exports = {
                 });
             } else if (inv === "y") {
                 let invite = await interaction.channel.createInvite({
-                    maxAge: 604800000,
+                    maxAge: 604800,
                     maxUses: 1
                  })
                 // await send invite here
