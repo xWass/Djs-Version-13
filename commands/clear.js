@@ -28,6 +28,15 @@ module.exports = {
                 ephemeral: true
             }));
 
+        if (amount === null)
+            return void (await interaction.reply({
+                content: 'You did not specify a number of messages to clear.',
+                ephemeral: true
+            }));
+
+
+
+            
 
         const row = new MessageActionRow()
             .addComponents(
