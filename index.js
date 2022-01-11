@@ -31,10 +31,10 @@ const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 })();
 
 client.once('ready', async () => {
-    console.log('Ready!')
 	for (const file of commandFiles) {
-		console.log(`~~ Loading ${file} ~~`);
+		console.log(`Loaded ${file}!`);
 	}
+	console.log('Ready!')
 });
 for (const file of commandFiles) {
     let command = require(`./commands/${file}`);
