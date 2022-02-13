@@ -6,10 +6,11 @@ const {
     MessageButton
 } = require('discord.js');
 
+const ms = require('ms')
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('mute')
-        .setDescription('Select a member and ute them.')
+        .setDescription('Select a member and mute them.')
         .addUserOption(option => option
             .setName('user')
             .setDescription('The member to mute.'))
@@ -21,6 +22,7 @@ module.exports = {
         const user = interaction.options.getUser('user');
         const mem = interaction.options.getMember('user');
         const t = interaction.options.getString('time')
+        const tt = ms(t)
         if (!interaction.member.permissions.has('TIMEOUT_MEMBERS'))
             return void (await interaction.reply({
                 content: 'You do not have the `TIMEOUT_MEMBERS` permission.',
@@ -41,10 +43,10 @@ module.exports = {
             return;
         }
         if (t === null)
-        return void (await interaction.reply({
-            content: 'You failed to provide a mute duration.',
-            ephemeral: true
-        }));
+            return void (await interaction.reply({
+                content: 'You failed to provide a mute duration.',
+                ephemeral: true
+            }));
 
         const row = new MessageActionRow()
             .addComponents(
@@ -93,7 +95,7 @@ module.exports = {
             components: [row]
         });
         if (response.customId === 'yes') {
-            await interaction.guild.members.setTimeout(1000)
+            await interaction.guild.members.setTimeout(tt)
             await interaction.followUp({
                 content: `${user} muted.`,
                 ephemeral: false
