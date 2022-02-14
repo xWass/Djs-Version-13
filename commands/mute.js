@@ -95,7 +95,7 @@ module.exports = {
             components: [row]
         });
         if (response.customId === 'yes') {
-            await interaction.guild.members.timeout(tt)
+            await mem.timeout(tt)
             await interaction.followUp({
                 content: `${user} muted.`,
                 ephemeral: false
