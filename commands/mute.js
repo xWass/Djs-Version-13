@@ -23,19 +23,19 @@ module.exports = {
         const mem = interaction.options.getMember('user') || null
         const t = interaction.options.getString('time') || null
         const tt = ms(t)
-        if (!interaction.member.permissions.has('TIMEOUT_MEMBERS'))
+        if (!interaction.member.permissions.has('MODERATE_MEMBERS'))
             return void (await interaction.reply({
                 content: 'You do not have the `TIMEOUT_MEMBERS` permission.',
                 ephemeral: true
             }));
 
-        if (!interaction.guild.me.permissions.has('TIMEOUT_MEMBERS'))
+        if (!interaction.guild.me.permissions.has('MODERATE_MEMBERS'))
             return void (await interaction.reply({
                 content: 'I do not have the `TIMEOUT_MEMBERS` permission.',
                 ephemeral: true
             }));
 
-        if (!mem.bannable) {
+        if (!mem.moderatable) {
             interaction.reply({
                 content: `I can not mute ${user.tag}.`,
                 ephemeral: false,
