@@ -14,7 +14,6 @@ for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	commands.push(command.data.toJSON());
 }
-require("dotenv").config();
 const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 (async () => {
 	try {
@@ -24,6 +23,7 @@ const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 			Routes.applicationCommands(clientId),
 			{ body: commands },
 		);
+		console.log(commands)
 		console.log('Successfully reloaded application (/) commands.');
 	} catch (error) {
 		console.error(error)
