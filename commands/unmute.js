@@ -3,7 +3,7 @@ const {
 } = require('@discordjs/builders');
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('mute')
+        .setName('unmute')
         .setDescription('Select a member and unmute them.')
         .addUserOption(option => option
             .setName('user')
