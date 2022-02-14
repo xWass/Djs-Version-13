@@ -19,9 +19,9 @@ module.exports = {
             .setDescription('Time to mute for. (1m, 1h, 1d, 1w. 28 days max)')),
     async execute(interaction) {
 
-        const user = interaction.options.getUser('user');
-        const mem = interaction.options.getMember('user');
-        const t = interaction.options.getString('time')
+        const user = interaction.options.getUser('user') || null
+        const mem = interaction.options.getMember('user') || null
+        const t = interaction.options.getString('time') || null
         const tt = ms(t)
         if (!interaction.member.permissions.has('TIMEOUT_MEMBERS'))
             return void (await interaction.reply({
