@@ -35,7 +35,15 @@ client.once('ready', async () => {
 		console.log(`Loaded ${file}!`);
 	}
 	console.log('Ready!')
+	client.user.setPresence({
+        status: "online",
+        game: {
+            name: "hi xiuh from xwass",
+            type: "PLAYING"
+        }
+    });
 });
+
 for (const file of commandFiles) {
     let command = require(`./commands/${file}`);
     client.commands.set(command.data.name, command);
