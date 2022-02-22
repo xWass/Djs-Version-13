@@ -29,19 +29,14 @@ const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 		console.error(error)
 	}
 })();
-
+client.on("ready", async () => {
+    client.user.setActivity(`hi xiuh from xwass`, { type: "WATCHING" })
+});
 client.once('ready', async () => {
 	for (const file of commandFiles) {
 		console.log(`Loaded ${file}!`);
 	}
 	console.log('Ready!')
-	client.user.setPresence({
-        status: "online",
-        game: {
-            name: "hi xiuh from xwass",
-            type: "PLAYING"
-        }
-    });
 });
 
 for (const file of commandFiles) {
