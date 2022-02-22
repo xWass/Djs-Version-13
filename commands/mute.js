@@ -16,12 +16,17 @@ module.exports = {
             .setDescription('The member to mute.'))
         .addStringOption(option => option
             .setName('time')
-            .setDescription('Time to mute for. (1m, 1h, 1d, 1w. 28 days max)')),
+            .setDescription('Time to mute for. (1m, 1h, 1d, 1w. 28 days max)'))
+        .addStringOption(option => option
+            .setName('reason')
+            .setDescription('Reason for muting this user.')),
+
     async execute(interaction) {
 
         const user = await interaction.options.getUser('user') || null
         const mem = await interaction.options.getMember('user') || null
-        const t = await interaction.options.getString('time') || null
+        const res = await interaction.options.getString('reason') || null
+        const t = await interaction.options.getString('time') || "No reason specified."
         const tt = ms(t)
         if (!interaction.member.permissions.has('MODERATE_MEMBERS'))
             return void (await interaction.reply({
@@ -95,7 +100,7 @@ module.exports = {
             components: [row]
         });
         if (response.customId === 'yes') {
-            await mem.timeout(tt)
+            await mem.timeout(tt, res)
             await interaction.followUp({
                 content: `${user} muted.`,
                 ephemeral: false
