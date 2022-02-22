@@ -30,7 +30,7 @@ const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 	}
 })();
 client.on("ready", async () => {
-    client.user.setActivity(`hi xiuh from xwass`, { type: "WATCHING" })
+    client.user.setActivity(`to slash commands!`, { type: "LISTENING" })
 });
 client.once('ready', async () => {
 	for (const file of commandFiles) {
