@@ -110,17 +110,19 @@ module.exports = {
             components: [row]
         });
         if (response.customId === 'yes') {
-            embed.setDescription(`${user} muted for ${tt}. \nReason: ${res}`)
+            embed.setDescription(`${user} muted for ${t}. \nReason: ${res}`)
             await mem.timeout(tt, res)
             await interaction.followUp({
                 embeds: [embed],
                 ephemeral: false
             });
-        } else
+            return;
+        } else {
             embed.setDescription("Interaction cancelled!")
-        await interaction.followUp({
-            embeds: [embed],
-            ephemeral: true
-        });
+            await interaction.followUp({
+                embeds: [embed],
+                ephemeral: true
+            });
+        }
     }
 }
