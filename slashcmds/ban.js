@@ -3,7 +3,8 @@ const {
 } = require('@discordjs/builders');
 const {
     MessageActionRow,
-    MessageButton
+    MessageButton,
+    MessageEmbed
 } = require('discord.js');
 
 module.exports = {
@@ -18,25 +19,36 @@ module.exports = {
         const user = interaction.options.getUser('user');
 		const mem = interaction.options.getMember('user');
 
-        if (!interaction.member.permissions.has('BAN_MEMBERS'))
-            return void (await interaction.reply({
-                content: 'You do not have the `BAN_MEMBERS` permission.',
-                ephemeral: true
-            }));
+        const embed = new MessageEmbed()
+        .setColor("RANDOM")
+        .setTimestamp()
 
-        if (!interaction.guild.me.permissions.has('BAN_MEMBERS'))
-            return void (await interaction.reply({
-                content: 'I do not have the `BAN_MEMBERS` permission.',
+        if (!interaction.member.permissions.has('BAN_MEMBERS')) {
+            embed.setTitle("You do not have the `BAN_MEMBERS` permission!")
+            await interaction.reply({
+                embeds: [embed],
                 ephemeral: true
-            }));
+            })
+            return;
+        }
 
-			if (!mem.bannable) {
-				interaction.reply({
-					content: `I can not ban ${user.tag}.`,
-					ephemeral: false,
-				})
-				return;
-			}
+        if (!interaction.guild.me.permissions.has('BAN_MEMBERS')) {
+            embed.setTitle("I do not have the `BAN_MEMBERS` permission!")
+            await interaction.reply({
+                embeds: [embed],
+                ephemeral: true
+            })
+            return;
+        }
+
+        if (!mem.bannable) {
+            embed.setTitle(`I can not baan ${user.tag}`)
+            await interaction.reply({
+                embeds: [embed],
+                ephemeral: false,
+            })
+            return;
+        }
 
         const row = new MessageActionRow()
             .addComponents(
@@ -51,22 +63,15 @@ module.exports = {
                     .setLabel('Cancel')
                     .setStyle('DANGER')
             );
+            embed.setTitle(`Are you sure you want to ban ${user.tag}?`)
         await interaction.reply({
-            content: `Are you sure you want to ban ${user.tag}?`,
+            embeds: [embed],
             components: [row],
             ephemeral: true
         });
         const response = await interaction.channel
             .awaitMessageComponent({
                 filter: (i) => {
-                    const isInteractionUser = i.user.id === interaction.user.id;
-                    if (!isInteractionUser) {
-                        i.followUp({
-                            content: "You can't use this!",
-                            ephemeral: true
-                        });
-                        return false;
-                    }
                     row.components[0].setDisabled(true);
                     row.components[1].setDisabled(true);
                     return i.customId === 'yes' || i.customId === 'no';
@@ -74,11 +79,14 @@ module.exports = {
                 time: 15000
             })
             .catch(() => null);
-        if (response === null)
-            return void (await interaction.followUp({
-                content: 'Time out! Operation cancelled.',
+        if (response === null) {
+            embed.setTitle("Interaction timed out!")
+            await interaction.followUp({
+                embeds: [embed],
                 ephemeral: true
-            }));
+            })
+            return;
+        }
         row.components[0].setDisabled(true);
         row.components[1].setDisabled(true);
         await response.update({
@@ -86,14 +94,17 @@ module.exports = {
         });
         if (response.customId === 'yes') {
 			await interaction.guild.members.ban(user.id)
+            embed.setTitle(`${user.tag} banned. \nModerator: ${interaction.user.tag}`)
             await interaction.followUp({
-                content: `${user} banned.`,
+                embeds: [embed],
                 ephemeral: false
             });
-        } else
+        } else {
+            embed.setTitle("Cancelled!")
             await interaction.followUp({
-                content: 'Cancelled!',
+                embeds: [embed],
                 ephemeral: true
             });
+        }
     }
 }

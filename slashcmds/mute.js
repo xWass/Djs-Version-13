@@ -42,7 +42,7 @@ module.exports = {
         }
 
         if (!interaction.guild.me.permissions.has('MODERATE_MEMBERS')) {
-            embed.setTitle("I do not have the `TIMEEOUT_MEMBERS` permission!")
+            embed.setTitle("I do not have the `TIMEOUT_MEMBERS` permission!")
             await interaction.reply({
                 embeds: [embed],
                 ephemeral: true
@@ -110,7 +110,7 @@ module.exports = {
             components: [row]
         });
         if (response.customId === 'yes') {
-            embed.setTitle(`${user.tag} muted for ${t}. \nReason: ${res}`)
+            embed.setTitle(`${user.tag} muted. \nModerator: ${interaction.user.tag} \nDuration: ${t} \nReason: ${res}`)
             await mem.timeout(tt, res)
             await interaction.followUp({
                 embeds: [embed],
