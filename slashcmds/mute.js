@@ -33,7 +33,7 @@ module.exports = {
         const t = await interaction.options.getString('time') || "No reason specified."
         const tt = ms(t)
         if (!interaction.member.permissions.has('MODERATE_MEMBERS')) {
-            embed.setDescription("You do not have the `TIMEOUT_MEMBERS` permission!")
+            embed.setTitle("You do not have the `TIMEOUT_MEMBERS` permission!")
             await interaction.reply({
                 embeds: [embed],
                 ephemeral: true
@@ -42,7 +42,7 @@ module.exports = {
         }
 
         if (!interaction.guild.me.permissions.has('MODERATE_MEMBERS')) {
-            embed.setDescription("I do not have the `TIMEEOUT_MEMBERS` permission!")
+            embed.setTitle("I do not have the `TIMEEOUT_MEMBERS` permission!")
             await interaction.reply({
                 embeds: [embed],
                 ephemeral: true
@@ -51,7 +51,7 @@ module.exports = {
         }
 
         if (!mem.moderatable) {
-            embed.setDescription(`I can not mute ${user.tag}`)
+            embed.setTitle(`I can not mute ${user.tag}`)
             await interaction.reply({
                 embeds: [embed],
                 ephemeral: false,
@@ -59,7 +59,7 @@ module.exports = {
             return;
         }
         if (t === null) {
-            embed.setDescription("You failed to provide a mute duration!")
+            embed.setTitle("You failed to provide a mute duration!")
             await interaction.reply({
                 embeds: [embed],
                 ephemeral: true
@@ -97,7 +97,7 @@ module.exports = {
             })
             .catch(() => null);
         if (response === null) {
-            embed.setDescription("Interaction timed out.")
+            embed.setTitle("Interaction timed out.")
             await interaction.followUp({
                 embeds: [embed],
                 ephemeral: true
@@ -110,7 +110,7 @@ module.exports = {
             components: [row]
         });
         if (response.customId === 'yes') {
-            embed.setDescription(`${user} muted for ${t}. \nReason: ${res}`)
+            embed.setTitle(`${user} muted for ${t}. \nReason: ${res}`)
             await mem.timeout(tt, res)
             await interaction.followUp({
                 embeds: [embed],
@@ -118,7 +118,7 @@ module.exports = {
             });
             return;
         } else {
-            embed.setDescription("Interaction cancelled!")
+            embed.setTitle("Interaction cancelled!")
             await interaction.followUp({
                 embeds: [embed],
                 ephemeral: true
