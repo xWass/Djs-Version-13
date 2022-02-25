@@ -110,7 +110,7 @@ module.exports = {
             components: [row]
         });
         if (response.customId === 'yes') {
-            embed.setTitle(`${user} muted for ${t}. \nReason: ${res}`)
+            embed.setTitle(`${user.tag} muted for ${t}. \nReason: ${res}`)
             await mem.timeout(tt, res)
             await interaction.followUp({
                 embeds: [embed],
