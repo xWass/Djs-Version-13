@@ -80,7 +80,7 @@ module.exports = {
                     .setLabel('Cancel')
                     .setStyle('DANGER')
             );
-        embed.setDescription(`Are you sure you want to mute ${user.tag}?`)
+        embed.setTitle(`Are you sure you want to mute ${user.tag}?`)
         await interaction.reply({
             embeds: [embed],
             components: [row],
