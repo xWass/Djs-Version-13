@@ -6,7 +6,6 @@ const {
     MessageButton,
     MessageEmbed
 } = require('discord.js');
-const { Client, MessageEmbed } = require('discord.js');
 
 const ms = require('ms')
 module.exports = {
