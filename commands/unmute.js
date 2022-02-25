@@ -28,7 +28,7 @@ module.exports = {
                 ephemeral: true
             }));
         await mem.timeout(null)
-        await interaction.followUp({
+        await interaction.reply({
             content: `${user} unmuted.`,
             ephemeral: false
         });
