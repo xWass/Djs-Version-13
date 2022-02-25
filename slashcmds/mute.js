@@ -3,8 +3,10 @@ const {
 } = require('@discordjs/builders');
 const {
     MessageActionRow,
-    MessageButton
+    MessageButton,
+    MessageEmbed
 } = require('discord.js');
+const { Client, MessageEmbed } = require('discord.js');
 
 const ms = require('ms')
 module.exports = {
@@ -22,36 +24,49 @@ module.exports = {
             .setDescription('Reason for muting this user.')),
 
     async execute(interaction) {
+        const embed = new MessageEmbed()
+            .setColor("RANDOM")
+            .setTimestamp()
 
         const user = await interaction.options.getUser('user') || null
         const mem = await interaction.options.getMember('user') || null
         const res = await interaction.options.getString('reason') || null
         const t = await interaction.options.getString('time') || "No reason specified."
         const tt = ms(t)
-        if (!interaction.member.permissions.has('MODERATE_MEMBERS'))
-            return void (await interaction.reply({
-                content: 'You do not have the `TIMEOUT_MEMBERS` permission.',
+        if (!interaction.member.permissions.has('MODERATE_MEMBERS')) {
+            embed.setDescription("You do not have the `TIMEOUT_MEMBERS` permission!")
+            await interaction.reply({
+                embeds: [embed],
                 ephemeral: true
-            }));
+            })
+            return;
+        }
 
-        if (!interaction.guild.me.permissions.has('MODERATE_MEMBERS'))
-            return void (await interaction.reply({
-                content: 'I do not have the `TIMEOUT_MEMBERS` permission.',
+        if (!interaction.guild.me.permissions.has('MODERATE_MEMBERS')) {
+            embed.setDescription("I do not have the `TIMEEOUT_MEMBERS` permission!")
+            await interaction.reply({
+                embeds: [embed],
                 ephemeral: true
-            }));
+            })
+            return;
+        }
 
         if (!mem.moderatable) {
-            interaction.reply({
-                content: `I can not mute ${user.tag}.`,
+            embed.setDescription(`I can not mute ${user.tag}`)
+            await interaction.reply({
+                embeds: [embed],
                 ephemeral: false,
             })
             return;
         }
-        if (t === null)
-            return void (await interaction.reply({
-                content: 'You failed to provide a mute duration.',
+        if (t === null) {
+            embed.setDescription("You failed to provide a mute duration!")
+            await interaction.reply({
+                embeds: [embed],
                 ephemeral: true
-            }));
+            })
+            return;
+        }
 
         const row = new MessageActionRow()
             .addComponents(
@@ -66,22 +81,15 @@ module.exports = {
                     .setLabel('Cancel')
                     .setStyle('DANGER')
             );
+        embed.setDescription(`Are you sure you want to mute ${usser.tag}?`)
         await interaction.reply({
-            content: `Are you sure you want to mute ${user.tag}?`,
+            embeds: [embed],
             components: [row],
             ephemeral: true
         });
         const response = await interaction.channel
             .awaitMessageComponent({
                 filter: (i) => {
-                    const isInteractionUser = i.user.id === interaction.user.id;
-                    if (!isInteractionUser) {
-                        i.followUp({
-                            content: "You can't use this!",
-                            ephemeral: true
-                        });
-                        return false;
-                    }
                     row.components[0].setDisabled(true);
                     row.components[1].setDisabled(true);
                     return i.customId === 'yes' || i.customId === 'no';
@@ -89,26 +97,31 @@ module.exports = {
                 time: 15000
             })
             .catch(() => null);
-        if (response === null)
-            return void (await interaction.followUp({
-                content: 'Time out! Operation cancelled.',
+        if (response === null) {
+            embed.setDescription("Interaction timed out.")
+            await interaction.followUp({
+                embeds: [embed],
                 ephemeral: true
-            }));
+            })
+            return;
+        }
         row.components[0].setDisabled(true);
         row.components[1].setDisabled(true);
         await response.update({
             components: [row]
         });
         if (response.customId === 'yes') {
+            embed.setDescription(`${user} muted for ${tt}. \nReason: ${res}`)
             await mem.timeout(tt, res)
             await interaction.followUp({
-                content: `${user} muted.`,
+                embeds: [embed],
                 ephemeral: false
             });
         } else
-            await interaction.followUp({
-                content: 'Cancelled!',
-                ephemeral: true
-            });
+            embed.setDescription("Interaction cancelled!")
+        await interaction.followUp({
+            embeds: [embed],
+            ephemeral: true
+        });
     }
 }

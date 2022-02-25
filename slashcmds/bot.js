@@ -21,7 +21,6 @@ module.exports = {
 
 
         await interaction.reply({
-            content: `Ping: ${interaction.client.ws.ping}ms \nUptime: ${days}d ${hours}h ${minutes}m ${seconds}s \nMemory: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}mb`,
             components: null,
             ephemeral: true,
             embeds: [embed]
