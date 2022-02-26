@@ -42,7 +42,7 @@ module.exports = {
         }
 
         if (!mem.bannable) {
-            embed.setTitle(`I can not baan ${user.tag}`)
+            embed.setTitle(`I can not ban ${user.tag}`)
             await interaction.reply({
                 embeds: [embed],
                 ephemeral: false,
