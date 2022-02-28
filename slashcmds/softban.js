@@ -3,7 +3,8 @@ const {
 } = require('@discordjs/builders');
 const {
     MessageActionRow,
-    MessageButton
+    MessageButton,
+    MessageEmbed
 } = require('discord.js');
 
 module.exports = {
@@ -24,22 +25,33 @@ module.exports = {
         const user = interaction.options.getUser('user');
         const mem = interaction.options.getMember('user');
         const inv = interaction.options.getString('invite');
-        console.log(inv)
-        if (!interaction.member.permissions.has('BAN_MEMBERS'))
-            return void (await interaction.reply({
-                content: 'You do not have the `BAN_MEMBERS` permission.',
-                ephemeral: true
-            }));
 
-        if (!interaction.guild.me.permissions.has('BAN_MEMBERS'))
-            return void (await interaction.reply({
-                content: 'I do not have the `BAN_MEMBERS` permission.',
+        const embed = new MessageEmbed()
+            .setColor("RANDOM")
+            .setTimestamp()
+
+        if (!interaction.member.permissions.has('BAN_MEMBERS')) {
+            embed.setTitle("You do not have the `BAN_MEMBERS` permission!")
+            await interaction.reply({
+                embeds: [embed],
                 ephemeral: true
-            }));
+            })
+            return;
+        }
+
+        if (!interaction.guild.me.permissions.has('BAN_MEMBERS')) {
+            embed.setTitle("I do not have the `BAN_MEMBERS` permission!")
+            await interaction.reply({
+                embeds: [embed],
+                ephemeral: true
+            })
+            return;
+        }
 
         if (!mem.bannable) {
-            interaction.reply({
-                content: `I can not ban ${user.tag}.`,
+            embed.setTitle(`I can not softban ${user.tag}`)
+            await interaction.reply({
+                embeds: [embed],
                 ephemeral: false,
             })
             return;
@@ -58,22 +70,15 @@ module.exports = {
                     .setLabel('Cancel')
                     .setStyle('DANGER')
             );
+        embed.setTitle(`Are you sure you want to softban ${user.tag}?`)
         await interaction.reply({
-            content: `Are you sure you want to ban ${user.tag}?`,
+            embeds: [embed],
             components: [row],
             ephemeral: true
         });
         const response = await interaction.channel
             .awaitMessageComponent({
                 filter: (i) => {
-                    const isInteractionUser = i.user.id === interaction.user.id;
-                    if (!isInteractionUser) {
-                        i.followUp({
-                            content: "You can't use this!",
-                            ephemeral: true
-                        });
-                        return false;
-                    }
                     row.components[0].setDisabled(true);
                     row.components[1].setDisabled(true);
                     return i.customId === 'yes' || i.customId === 'no';
@@ -81,11 +86,13 @@ module.exports = {
                 time: 15000
             })
             .catch(() => null);
-        if (response === null)
-            return void (await interaction.followUp({
-                content: 'Time out! Operation cancelled.',
+        if (response === null) {
+            embed.setTitle("Interaction timed out!")
+            await interaction.followUp({
+                embeds: [embed],
                 ephemeral: true
-            }));
+            })
+        }
         row.components[0].setDisabled(true);
         row.components[1].setDisabled(true);
         await response.update({
@@ -95,59 +102,65 @@ module.exports = {
 
         if (response.customId === 'yes') {
             if (inv === null) {
+                embed.setTitle(`${user.tag} softbannned \nModerator: ${interaction.user.tag}`)
                 await interaction.guild.members.ban(user.id, {
                     days: 7
                 })
                 await interaction.guild.bans.remove(user.id)
                 await interaction.followUp({
-                    content: `${user} soft-banned.`,
+                    embeds: [embed],
                     ephemeral: false
                 });
             } else if (inv === "y") {
                 let invite = await interaction.channel.createInvite({
                     maxAge: 604800,
                     maxUses: 1
-                 })
+                })
                 // await send invite here
+                embed.setTitle(`You were softbanned from a server. Heres an invite back: \n${invite}`)
                 await user.send({
-                    content: `You were softbanned. Heres an invite back: ${invite}`,
+                    embeds: [embed],
                     ephemeral: false
                 })
                 await interaction.guild.members.ban(user.id, {
                     days: 7
                 })
                 await interaction.guild.bans.remove(user.id)
+                embed.setTitle(`${user.tag} softbanned. \nModerator: ${interaction.user.tag} \nThis user was invited back`)
                 await interaction.followUp({
-                    content: `${user} soft-banned and re-invited`,
+                    embeds: [embed],
                     ephemeral: false
                 });
                 return;
             } else if (inv === "n") {
+                embed.setTitle(`${user.tag} softbanned \nModerator: ${interaction.user.tag} \nThis user was not invited back`)
                 await interaction.guild.members.ban(user.id, {
                     days: 7
                 })
                 await interaction.guild.bans.remove(user.id)
                 await interaction.followUp({
-                    content: `${user} soft-banned, not re-invited.`,
+                    embeds: [embed],
                     ephemeral: false
                 });
                 return;
             } else {
+                embed.setTitle(`${user.tag} softbanned \nModerator: ${interaction.user.tag} \nThis usser was not reinvited`)
                 await interaction.guild.members.ban(user.id, {
                     days: 7
                 })
                 await interaction.guild.bans.remove(user.id)
                 await interaction.followUp({
-                    content: `${user} soft-banned, not re-invited.`,
+                    embeds: [embed],
                     ephemeral: false
                 });
                 return;
 
             }
         } else
-            await interaction.followUp({
-                content: 'Cancelled!',
-                ephemeral: true
-            });
+            embed.setTitle("Interaction cancelled!")
+        await interaction.followUp({
+            embeds: [embed],
+            ephemeral: true
+        });
     }
 }
