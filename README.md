@@ -1,3 +1,3 @@
 # Djs-Version-13
-Mute command working, added unmute command.
+some commands not replying after button press
 restarting
