@@ -1,6 +1,7 @@
 const fs = require('fs');
-const chalk = require('chalk')
+const chalk = require('chalk');
 const { Client, Collection, Intents } = require('discord.js');
+//const MongoClient = require('mongodb').MongoClient
 const intents = new Intents();
 intents.add(
     Intents.FLAGS.GUILDS,
@@ -9,6 +10,7 @@ intents.add(
     Intents.FLAGS.GUILD_PRESENCES,
     Intents.FLAGS.GUILD_MEMBERS
 );
+
 const client = new Client({ intents: intents, partials: ["MESSAGE", "REACTION"], allowedMentions: { parse: ["users"] } });
 require("dotenv").config();
 client.LegacyCommands = new Collection();
@@ -43,13 +45,14 @@ const databaseConnect = async () => {
 const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 (async () => {
     try {
-        console.log(chalk.yellowBright('Started refreshing application (/) commands.'));
+        console.log(chalk.redBright('New version of the bot made by DEEM#0001'))
+        console.log(chalk.yellowBright('Started refreshing application [/] commands.'));
 
         await rest.put(
             Routes.applicationCommands(clientId),
             { body: commands },
         );
-        console.log(chalk.greenBright('Successfully reloaded application (/) commands.'));
+        console.log(chalk.greenBright('Successfully reloaded application [/] commands.'));
     } catch (error) {
         console.error(error)
     }
@@ -57,7 +60,7 @@ const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 
 client.on("ready", async () => {
     //databaseConnect()
-	client.user.setActivity(`slash commands!`, { type: "LISTENING" })
+    client.user.setActivity(`Slash Commands!`, { type: "LISTENING" })
 });
 
 client.once('ready', async () => {
@@ -68,12 +71,12 @@ client.once('ready', async () => {
         console.log(chalk.yellowBright('[LEGACY COMMAND LOADED]') + ` ${file}`);
     }
     console.log(chalk.greenBright('Ready!'))
-
 });
 for (const file of commandFiles) {
     let command = require(`./slashcmds/${file}`);
     client.SlashCommands.set(command.data.name, command);
 }
+
 client.on('interactionCreate', async interaction => {
     if (!interaction.isCommand()) return;
 
@@ -115,4 +118,5 @@ client.on("messageCreate", async (message) => {
         console.log(chalk.redBright('[ERROR]') + ` ${err}`);
     }
 });
+
 client.login(process.env.TOKEN);

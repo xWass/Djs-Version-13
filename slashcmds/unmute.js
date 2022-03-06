@@ -1,56 +1,45 @@
-const {
-    SlashCommandBuilder
-} = require('@discordjs/builders');
-const {
-    MessageEmbed
-} = require('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('unmute')
         .setDescription('Select a member and unmute them.')
+
         .addUserOption(option => option
             .setName('user')
             .setDescription('The member to unmute.')),
+
     async execute(interaction) {
         const user = await interaction.options.getUser('user') || null
         const mem = await interaction.options.getMember('user') || null
-
         const embed = new MessageEmbed()
-        .setColor("RANDOM")
-        .setTimestamp()
 
         if (!interaction.member.permissions.has('MODERATE_MEMBERS')) {
-            embed.setTitle("You do not have the `TIMEOUT_MEMBERS` permission!")
-            await interaction.reply({
-                embeds: [embed],
-                ephemeral: true
-            })
+            embed.setColor('DARK_RED')
+            embed.setDescription('<:Error:949853701504372778> You do not have the `TIMEOUT_MEMBERS` permission!')
+            await interaction.reply({ embeds: [embed], ephemeral: true })
             return;
         }
 
         if (!interaction.guild.me.permissions.has('MODERATE_MEMBERS')) {
-            embed.setTitle("I do not have the `TIMEOUT_MEMBERS` permission!")
-            await interaction.reply({
-                embeds: [embed],
-                ephemeral: true
-            })
+            embed.setColor('DARK_RED')
+            embed.setTitle('<:Error:949853701504372778> I do not have the `TIMEOUT_MEMBERS` permission!')
+            await interaction.reply({ embeds: [embed], ephemeral: true })
             return;
         }
 
         if (!mem.moderatable) {
-            embed.setTitle(`I can not unmute ${user.tag}`)
-            await interaction.reply({
-                embeds: [embed],
-                ephemeral: false,
-            })
+            embed.setColor('DARK_RED')
+            embed.setTitle('Error...')
+            embed.setDescription(`<:Error:949853701504372778> I can not unmute <@${user.id}> **[ ${user.id} ]**\nMember maybe not have mute or check bot permissions please!`)
+            await interaction.reply({ embeds: [embed], ephemeral: true })
             return;
         }
         await mem.timeout(null)
-        embed.setTitle(`${user.tag} unmuted. \nModerator: ${interaction.user.tag}`)
-        await interaction.reply({
-            embeds: [embed],
-            ephemeral: false
-        });
+        embed.setColor('GREEN')
+        embed.setTitle('Success...')
+        embed.setDescription(`**${user.tag}** has been unmuted.\nModerator: **${interaction.user.tag}**`)
+        await interaction.reply({ embeds: [embed] });
     }
 }
