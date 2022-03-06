@@ -2,8 +2,8 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require("discord.js")
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('serverinfo')
-        .setDescription('Display info about this server.'),
+        .setName('contributers')
+        .setDescription('Display all active contributers.'),
     async execute(interaction) {
         let embed = new MessageEmbed()
         .setTitle("Contributers")
