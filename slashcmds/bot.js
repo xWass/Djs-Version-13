@@ -27,7 +27,7 @@ module.exports = {
             .addFields(
                 { name: `Servers :computer:`, value: `\`\`\`${guildsCount}\`\`\``, inline: true },
                 { name: `Users :family_mmbb:`, value: `\`\`\`${usersCount}\`\`\``, inline: true },
-                { name: `Shard ID :newspaper:`, value: `\`\`\`${interaction.guild.shardId}\`\`\``, inline: true },
+                { name: `Shard ID :newspaper:`, value: `\`\`\`1\`\`\``, inline: true },
                 { name: `API Latency :ping_pong:`, value: `\`\`\`${interaction.client.ws.ping}ms\`\`\``, inline: true },
                 { name: `Discord.js :tools:`, value: `\`\`\`13.4.0\`\`\``, inline: true },
                 { name: `CPU Usage :bar_chart:`, value: `\`\`\`${await cpu.usage()} %\`\`\``, inline: true },
