@@ -45,7 +45,6 @@ const databaseConnect = async () => {
 const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 (async () => {
     try {
-        console.log(chalk.redBright('New version of the bot made by DEEM#0001'))
         console.log(chalk.yellowBright('Started refreshing application [/] commands.'));
 
         await rest.put(
