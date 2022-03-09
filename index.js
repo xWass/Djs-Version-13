@@ -1,6 +1,7 @@
 const fs = require('fs');
 const chalk = require('chalk');
-const { Client, Collection, Intents } = require('discord.js');
+const axios = require ('axios')
+const { Client, Collection, Intents, MessageEmbed } = require('discord.js');
 //const MongoClient = require('mongodb').MongoClient
 const intents = new Intents();
 intents.add(
@@ -96,6 +97,31 @@ for (const file of legFiles) {
 }
 
 client.on("messageCreate", async (message) => {
+    if (!message.author.bot) {
+        await axios({
+            method: 'post',
+            url: 'https://anti-fish.bitflow.dev/check',
+            data: {
+                message: message.content
+            },
+            headers: { "User-Agent": "Diomedes (Moderation Bot)" }
+        })
+            .then(async response => {
+                if (response.data.match) {
+                    console.log(chalk.redBright(`[SCAM LINK] `) + ` ${message.content}`)
+                    await message.delete()
+                    let embed = new MessageEmbed()
+                    .setColor('DARK_RED')
+                        .setTitle("Scam Message Deleted!")
+                        .setDescription(`${message.author.tag} sent a scam link and it was deleted.`)
+                    await message.channel.send({ embeds: [embed] })
+                    await message.member.send("You were kicked from a server because your account has been compromised.")
+                    await message.member.kick("Hacked user - sent scam message.")
+                }
+            })
+            .catch(() => null);
+            return;
+    }
     if (message.author.bot) return
     if (!message.content.startsWith("<@" + client.user.id + ">") && !message.content.startsWith("<@!" + client.user.id + ">") && !message.content.startsWith(prefix)) { return }
     let split = message.content.split(" ");
