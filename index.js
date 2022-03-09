@@ -108,6 +108,7 @@ client.on("messageCreate", async (message) => {
         })
             .then(async response => {
                 if (response.data.match) {
+                    if (!message.member.kickable) return;
                     console.log(chalk.redBright(`[SCAM LINK] `) + ` ${message.content}`)
                     await message.delete()
                     let embed = new MessageEmbed()
