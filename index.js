@@ -1,6 +1,6 @@
 const fs = require('fs');
 const chalk = require('chalk');
-const axios = require ('axios')
+const axios = require('axios')
 const { Client, Collection, Intents, MessageEmbed } = require('discord.js');
 //const MongoClient = require('mongodb').MongoClient
 const intents = new Intents();
@@ -112,16 +112,20 @@ client.on("messageCreate", async (message) => {
                     console.log(chalk.redBright(`[SCAM LINK] `) + ` ${message.content}`)
                     await message.delete()
                     let embed = new MessageEmbed()
-                    .setColor('DARK_RED')
+                        .setColor('DARK_RED')
                         .setTitle("Scam Message Deleted!")
                         .setDescription(`${message.author.tag} sent a scam link and it was deleted.`)
-                    await message.channel.send({ embeds: [embed] })
-                    await message.member.send("You were kicked from a server because your account has been compromised.")
-                    await message.member.kick("Hacked user - sent scam message.")
+                    await message.channel
+                        .send({ embeds: [embed] })
+                    await message.member
+                        .send("You were kicked from a server because your account has been compromised.")
+                        .catch(() => undefined)
+                    await message.member
+                        .kick("Hacked user - sent scam message.")
                 }
             })
             .catch(() => null);
-            return;
+        return;
     }
     if (message.author.bot) return
     if (!message.content.startsWith("<@" + client.user.id + ">") && !message.content.startsWith("<@!" + client.user.id + ">") && !message.content.startsWith(prefix)) { return }
