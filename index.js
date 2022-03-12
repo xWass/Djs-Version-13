@@ -108,7 +108,6 @@ client.on("messageCreate", async (message) => {
         })
             .then(async response => {
                 if (response.data.match) {
-                    if (!message.member.kickable) return;
                     console.log(chalk.redBright(`[SCAM LINK] `) + ` ${message.content}`)
                     await message.delete()
                     let embed = new MessageEmbed()
@@ -117,6 +116,9 @@ client.on("messageCreate", async (message) => {
                         .setDescription(`${message.author.tag} sent a scam link and it was deleted.`)
                     await message.channel
                         .send({ embeds: [embed] })
+                        
+                    if (!message.member.kickable) return;
+
                     await message.member
                         .send("You were kicked from a server because your account has been compromised.")
                         .catch(() => undefined)
