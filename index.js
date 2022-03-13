@@ -116,14 +116,14 @@ client.on("messageCreate", async (message) => {
                         .setDescription(`${message.author.tag} sent a scam link and it was deleted.`)
                     await message.channel
                         .send({ embeds: [embed] })
-                        
-                    if (!message.member.kickable) return;
 
+                    if (!message.member.kickable) return;
+                    embed.setTitle("You were kicked from a server because you sent a scam link. \nThis could mean your account has been compromised.")
                     await message.member
-                        .send("You were kicked from a server because your account has been compromised.")
+                        .send({ embeds: [embed] })
                         .catch(() => undefined)
                     await message.member
-                        .kick("Hacked user - sent scam message.")
+                        .kick("Compromised account - sent scam link.")
                 }
             })
             .catch(() => null);
