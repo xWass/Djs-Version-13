@@ -1,4 +1,5 @@
 const { MessageEmbed } = require("discord.js");
+const { mem, cpu, os } = require('node-os-utils');
 
 module.exports = {
     name: "bot",
