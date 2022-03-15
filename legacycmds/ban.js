@@ -1,13 +1,12 @@
-const { MessageEmbed } = require("discord.js");
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
 
 module.exports = {
     name: "ban",
     usage: "ban",
-    description: "Ban a user.",
-    async execute(client, message, args) {
-        console.log(args[0], args[1], args[2])
-
-
+    description: "Ban a mem.id.",
+    async execute(client, message, args) {        
+        let mem = message.mentions.members.first()
         const embed = new MessageEmbed()
         if (!message.member.permissions.has('BAN_MEMBERS')) {
             embed.setColor('DARK_RED')
@@ -26,15 +25,15 @@ module.exports = {
         if (!mem.bannable) {
             embed.setColor('DARK_RED')
             embed.setTitle('Missing permission!')
-            embed.setDescription(`<:Error:949853701504372778> I can not ban <@${user.id}> **[ ${user.id} ]**\nCheck bot permissions please!`)
+            embed.setDescription(`<:Error:949853701504372778> I can not ban <@${mem.id}> **[ ${mem.id} ]**\nThis user most likely has a higher role than me or is the owner.`)
             await message.reply({ embeds: [embed], ephemeral: true, })
             return;
         }
 
         embed.setColor('DARK_RED')
         embed.setTitle(`Ban a member?`)
-        embed.setDescription(`Are you sure you want to ban <@${user.id}>?`)
-        embed.setFooter(`ID: ${user.id}`)
+        embed.setDescription(`Are you sure you want to ban <@${mem.id}>?`)
+        embed.setFooter(`ID: ${mem.id}`)
 
         const row = new MessageActionRow()
             .addComponents(
@@ -75,10 +74,10 @@ module.exports = {
         await response.update({ components: [row] });
 
         if (response.customId === 'yes') {
-            await message.guild.members.ban(user.id)
+            await message.guild.members.ban(mem.id)
             embed.setColor('GREEN')
             embed.setTitle('Member has been banned')
-            embed.setDescription(`<:Success:949853804155793450> **${user.tag}** has been banned.\nModerator: **${message.user.tag}**`)
+            embed.setDescription(`<:Success:949853804155793450> **${mem.user.tag}** has been banned.\nModerator: **${message.author.tag}**`)
             await message.reply({ embeds: [embed], ephemeral: false });
         } else {
             embed.setTitle('Cancelled!')
