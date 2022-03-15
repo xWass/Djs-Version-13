@@ -1,14 +1,12 @@
 const { MessageEmbed } = require("discord.js");
-const { mem, cpu, os } = require('node-os-utils');
 
 module.exports = {
     name: "ban",
     usage: "ban",
     description: "Ban a user.",
     async execute(client, message, args) {
+        console.log(args[0], args[1], args[2])
 
-        const user = message.options.getUser('user');
-        const mem = message.options.getMember('user');
 
         const embed = new MessageEmbed()
         if (!message.member.permissions.has('BAN_MEMBERS')) {
