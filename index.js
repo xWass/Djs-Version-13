@@ -129,11 +129,11 @@ client.on("messageCreate", async (message) => {
             .catch(() => null);
 
         if (message.author.bot) return
-        if (!message.content.startsWith("<@" + client.user.id + ">") && !message.content.startsWith("<@!" + client.user.id + ">") && !message.content.startsWith(prefix)) { return }
+        if (!message.content.startsWith("<@" + client.user.id + ">") || !message.content.startsWith("<@!" + client.user.id + ">") || !message.content.startsWith(prefix)) { return }
         let split = message.content.split(" ");
         let search = split[1]
         if (message.content.startsWith(prefix)) search = split[0].slice(prefix.length)
-        let command = client.LegacyCommands.get(search) || client.LegacyCommands.find((cmd) => cmd.aliases && cmd.aliases.includes(search));
+        let command = client.LegacyCommands.get(search) || client.LegacyCommands.find((cmd) => cmd.aliases || cmd.aliases.includes(search));
         let i = 1;
         console.log(chalk.yellowBright('[EVENT FIRED]') + ` messageCreate with content: ${message.content}`);
 
