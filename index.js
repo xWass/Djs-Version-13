@@ -98,7 +98,6 @@ for (const file of legFiles) {
 }
 
 client.on("messageCreate", async (message) => {
-    if (!message.author.bot) {
         await axios({
             method: 'post',
             url: 'https://anti-fish.bitflow.dev/check',
@@ -128,8 +127,7 @@ client.on("messageCreate", async (message) => {
                 }
             })
             .catch(() => null);
-        return;
-    } else {
+
         if (message.author.bot) return
         if (!message.content.startsWith("<@" + client.user.id + ">") && !message.content.startsWith("<@!" + client.user.id + ">") && !message.content.startsWith(prefix)) { return }
         let split = message.content.split(" ");
@@ -150,7 +148,6 @@ client.on("messageCreate", async (message) => {
             message.reply(err.toString());
             console.log(chalk.redBright('[ERROR]') + ` ${err}`);
         }
-    }
 });
 
 client.login(process.env.TOKEN);
