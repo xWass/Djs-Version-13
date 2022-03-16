@@ -53,11 +53,18 @@ module.exports = {
         const response = await message.channel
             .awaitMessageComponent({
                 filter: (i) => {
+                    const isInteractionUser = i.user.id === message.author.id;
+
+                    if (!isInteractionUser) {
+                        return false;
+                    }
                     row.components[0].setDisabled(true);
                     row.components[1].setDisabled(true);
                     return i.customId === 'yes' || i.customId === 'no';
-                }, time: 15000
-            }).catch(() => null);
+                },
+                time: 15000
+            })
+            .catch(() => null);
 
         if (response === null) {
             embed.setColor('DARK_RED')
