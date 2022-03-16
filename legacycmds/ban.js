@@ -4,7 +4,7 @@ const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
 module.exports = {
     name: "ban",
     usage: "ban",
-    description: "Ban a mem.id.",
+    description: "Ban a member.",
     async execute(client, message, args) {        
         let mem = message.mentions.members.first()
         const embed = new MessageEmbed()
