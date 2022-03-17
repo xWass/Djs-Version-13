@@ -1,39 +1,53 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
-
+const ms = require('ms')
 module.exports = {
-    name: "ban",
-    usage: "ban",
-    description: "Ban a member.",
+    name: "mute",
+    usage: "mute",
+    description: "Mute a member.",
     async execute(client, message, args) {
         let mem = message.mentions.members.first()
         const embed = new MessageEmbed()
-        if (!message.member.permissions.has('BAN_MEMBERS')) {
+        if (!message.member.permissions.has('MODERATE_MEMBERS')) {
             embed.setColor('DARK_RED')
-            embed.setDescription('<:Error:949853701504372778> You do not have the `BAN_MEMBERS` permission!')
+            embed.setDescription('<:Error:949853701504372778> You do not have the `TIMEOUT_MEMBERS` permission!')
             await message.reply({ embeds: [embed], ephemeral: true })
             return;
         }
 
-        if (!message.guild.me.permissions.has('BAN_MEMBERS')) {
+        if (!message.guild.me.permissions.has('MODERATE_MEMBERS')) {
             embed.setColor('DARK_RED')
-            embed.setDescription('<:Error:949853701504372778> I do not have the `BAN_MEMBERS` permission!')
+            embed.setDescription('<:Error:949853701504372778> I do not have the `TIMEOUT_MEMBERS` permission!')
             await message.reply({ embeds: [embed], ephemeral: true })
             return;
         }
 
-        if (!mem.bannable) {
+        if (!mem.moderatable) {
             embed.setColor('DARK_RED')
             embed.setTitle('Missing permission!')
-            embed.setDescription(`<:Error:949853701504372778> I can not ban <@${mem.id}> **[ ${mem.id} ]**\nThis user most likely has a higher role than me or is the owner.`)
+            embed.setDescription(`<:Error:949853701504372778> I can not mute <@${mem.id}> **[ ${mem.id} ]**\nThis user most likely has a higher role than me or is the owner.`)
             await message.reply({ embeds: [embed], ephemeral: true, })
             return;
         }
-
+        if (args[1] === undefined) {
+            embed.setColor('DARK_RED')
+            embed.setTitle('No Duration!')
+            embed.setDescription(`<:Error:949853701504372778> You failed to provide a mute duration! \nFormat: \`\`\`1min, 1h, 1d\`\`\``)
+            await message.reply({ embeds: [embed], ephemeral: true, })
+            return;
+        }
         embed.setColor('DARK_RED')
-        embed.setTitle(`Ban a member?`)
-        embed.setDescription(`Are you sure you want to ban <@${mem.id}>?`)
+        embed.setTitle(`Mute a member?`)
+        embed.setDescription(`Are you sure you want to mute <@${mem.id}>?`)
+        let t = args[1]
+        let tt = ms(t)
 
+        if (isNaN(tt)) {
+            embed.setColor('DARK_RED')
+            embed.setTitle('Duration formatted incorrectly!')
+            embed.setDescription(`<:Error:949853701504372778> You provided a duration in the incorrect format! \nFormat: \`\`\`1min, 1h, 1d\`\`\``)
+            await message.reply({ embeds: [embed], ephemeral: true, })
+            return;
+        }
         const row = new MessageActionRow()
             .addComponents(
                 new MessageButton()
@@ -67,9 +81,10 @@ module.exports = {
 
         if (response === null) {
             embed.setColor('DARK_RED')
-            embed.setTitle('message timed out!')
+            embed.setTitle('Interaction timed out!')
             embed.setDescription('The response time for the command has expired')
             embed.setFooter('Enter the command again please')
+            
             await message.reply({ embeds: [embed], ephemeral: true })
             return;
         }
@@ -80,17 +95,19 @@ module.exports = {
         await response.update({ components: [row] });
 
         if (response.customId === 'yes') {
+            await mem.timeout(tt)
+
             embed.setColor('GREEN')
-            embed.setTitle('Member has been banned')
-            embed.setDescription(`<:Success:949853804155793450> **${mem.user.tag}** has been banned.\nModerator: **${message.author.tag}**`)
+            embed.setTitle('Member has been muted')
+            embed.setDescription(`${mem.user.tag} has been muted.\nModerator: **${message.author.tag}**\nDuration: **${t}**`)
             embed.setFooter(`ID: ${mem.id}`)
 
-            await message.guild.members.ban(mem.id)
             await message.reply({ embeds: [embed], ephemeral: false });
         } else {
             embed.setTitle('Cancelled!')
             embed.setDescription('<:Success:949853804155793450> The command was successfully cancelled')
             embed.setFooter('You can use another command')
+            
             await message.reply({ embeds: [embed], ephemeral: true });
         }
     }

@@ -2,37 +2,37 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
 
 module.exports = {
-    name: "ban",
-    usage: "ban",
-    description: "Ban a member.",
-    async execute(client, message, args) {
+    name: "kick",
+    usage: "kick",
+    description: "Kick a member.",
+    async execute(client, message, args) {        
         let mem = message.mentions.members.first()
         const embed = new MessageEmbed()
-        if (!message.member.permissions.has('BAN_MEMBERS')) {
+        if (!message.member.permissions.has('KICK_MEMBERS')) {
             embed.setColor('DARK_RED')
-            embed.setDescription('<:Error:949853701504372778> You do not have the `BAN_MEMBERS` permission!')
+            embed.setDescription('<:Error:949853701504372778> You do not have the `KICK_MEMBERS` permission!')
             await message.reply({ embeds: [embed], ephemeral: true })
             return;
         }
 
-        if (!message.guild.me.permissions.has('BAN_MEMBERS')) {
+        if (!message.guild.me.permissions.has('KICK_MEMBERS')) {
             embed.setColor('DARK_RED')
-            embed.setDescription('<:Error:949853701504372778> I do not have the `BAN_MEMBERS` permission!')
+            embed.setDescription('<:Error:949853701504372778> I do not have the `KICK_MEMBERS` permission!')
             await message.reply({ embeds: [embed], ephemeral: true })
             return;
         }
 
-        if (!mem.bannable) {
+        if (!mem.kickable) {
             embed.setColor('DARK_RED')
             embed.setTitle('Missing permission!')
-            embed.setDescription(`<:Error:949853701504372778> I can not ban <@${mem.id}> **[ ${mem.id} ]**\nThis user most likely has a higher role than me or is the owner.`)
+            embed.setDescription(`<:Error:949853701504372778> I can not kick <@${mem.id}> **[ ${mem.id} ]**\nThis user most likely has a higher role than me or is the owner.`)
             await message.reply({ embeds: [embed], ephemeral: true, })
             return;
         }
 
         embed.setColor('DARK_RED')
-        embed.setTitle(`Ban a member?`)
-        embed.setDescription(`Are you sure you want to ban <@${mem.id}>?`)
+        embed.setTitle(`Kick a member?`)
+        embed.setDescription(`Are you sure you want to kick <@${mem.id}>?`)
 
         const row = new MessageActionRow()
             .addComponents(
@@ -67,9 +67,10 @@ module.exports = {
 
         if (response === null) {
             embed.setColor('DARK_RED')
-            embed.setTitle('message timed out!')
+            embed.setTitle('Interaction timed out!')
             embed.setDescription('The response time for the command has expired')
             embed.setFooter('Enter the command again please')
+            
             await message.reply({ embeds: [embed], ephemeral: true })
             return;
         }
@@ -80,17 +81,19 @@ module.exports = {
         await response.update({ components: [row] });
 
         if (response.customId === 'yes') {
+            await message.guild.members.kick(mem.id)
+
             embed.setColor('GREEN')
-            embed.setTitle('Member has been banned')
-            embed.setDescription(`<:Success:949853804155793450> **${mem.user.tag}** has been banned.\nModerator: **${message.author.tag}**`)
+            embed.setTitle('Member has been kicked')
+            embed.setDescription(`<:Success:949853804155793450> **${mem.user.tag}** has been kicked.\nModerator: **${message.author.tag}**`)
             embed.setFooter(`ID: ${mem.id}`)
 
-            await message.guild.members.ban(mem.id)
             await message.reply({ embeds: [embed], ephemeral: false });
         } else {
             embed.setTitle('Cancelled!')
             embed.setDescription('<:Success:949853804155793450> The command was successfully cancelled')
             embed.setFooter('You can use another command')
+            
             await message.reply({ embeds: [embed], ephemeral: true });
         }
     }
