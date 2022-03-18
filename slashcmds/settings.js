@@ -77,24 +77,26 @@ module.exports = {
 
         if (response.customId === 'yes') {
             if (change === "enable") {
+
                 //update to enable here
-                console.log("L")
-            } else if (change === "disable") {
+                embed.setColor('GREEN')
+                embed.setTitle('Setting updated!')
+                embed.setDescription('<:Success:949853804155793450> You will see confirmation messages when you run a moderator command.')
+                embed.setFooter('You can use another command')
+
+                await interaction.followUp({ embeds: [embed], ephemeral: true });
+                return;
+                } else if (change === "disable") {
+
                 //update to disable here
-                console.log("L")
-            }
-            // run the code to change where guildId = interaction.guild.id
+                embed.setColor('GREEN')
+                embed.setTitle('Setting updated!')
+                embed.setDescription('<:Success:949853804155793450> You will no longer see confirmation messages when you run a moderator command.')
+                embed.setFooter('You can use another command')
 
-            embed.setColor('GREEN')
-            embed.setTitle('Setting updated!')
-            embed.setDescription('<:Success:949853804155793450> You will no longer see confirmation messages when you run a moderator command.')
-            embed.setFooter('You can use another command')
-
-
-
-            await interaction.followUp({ embeds: [embed], ephemeral: true });
-
-
+                await interaction.followUp({ embeds: [embed], ephemeral: true });
+                return;
+                }
         } else {
             embed.setColor('GREEN')
             embed.setTitle('Cancelled!')
