@@ -62,7 +62,6 @@ module.exports = {
                 time: 15000
             })
             .catch(() => null);
-
         if (response === null) {
             embed.setColor("DARK_RED")
             embed.setTitle("Interaction timed out!")
@@ -76,13 +75,14 @@ module.exports = {
         await response.update({ components: [row] });
 
         if (response.customId === "yes") {
+            console.log("made it to customId === \"yes\"")
             let id = interaction.guild.id
             let found = await client.db.collection("settings").findOne({ guildid:id })
             if (!found) {
                 await client.db.collection("settings").insertOne({ guildid:id })
             }
             if (change === "enable") {
-
+                console.log("made it to enable")
                 //update to enable here
                 await client.db.collection("settings").updateOne({guildid:id}, {$set:{enabled:true}})
                 
@@ -94,6 +94,7 @@ module.exports = {
                 await interaction.followUp({ embeds: [embed], ephemeral: true });
                 return;
             } else if (change === "disable") {
+                console.log("made it to disable")
                 await client.db.collection("settings").updateOne({guildid:id}, {$set:{enabled:false}})
 
                 //update to disable here
