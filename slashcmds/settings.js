@@ -21,7 +21,7 @@ module.exports = {
 
     async execute(interaction, client) {
         const set = interaction.options.getString("setting");
-        const change = interaction.options.getString("change");
+        const change = interaction.options.getString("modify");
 
 
         const embed = new MessageEmbed()
@@ -75,7 +75,6 @@ module.exports = {
         await response.update({ components: [row] });
 
         if (response.customId === "yes") {
-            console.log("made it to customId === \"yes\"")
             let id = interaction.guild.id
             let found = await client.db.collection("settings").findOne({ guildid:id })
             if (!found) {
@@ -83,7 +82,6 @@ module.exports = {
             }
             console.log(change)
             if (change === "enable") {
-                console.log("made it to enable")
                 //update to enable here
                 await client.db.collection("settings").updateOne({guildid:id}, {$set:{enabled:true}})
                 
@@ -95,7 +93,6 @@ module.exports = {
                 await interaction.followUp({ embeds: [embed], ephemeral: true });
                 return;
             } else if (change === "disable") {
-                console.log("made it to disable")
                 await client.db.collection("settings").updateOne({guildid:id}, {$set:{enabled:false}})
 
                 //update to disable here
