@@ -32,18 +32,6 @@ module.exports = {
             await interaction.reply({ embeds: [embed], ephemeral: true })
             return;
         }
-        if (set !== "confirms") {
-            embed.setColor('DARK_RED')
-            embed.setDescription('<:Error:949853701504372778> An error has occured with this command.')
-            await interaction.reply({ embeds: [embed], ephemeral: true })
-            return;
-        }
-        if (change !== "enable" || change !== "disable") {
-            embed.setColor('DARK_RED')
-            embed.setDescription('<:Error:949853701504372778> An error has occured with this command.')
-            await interaction.reply({ embeds: [embed], ephemeral: true })
-            return;
-        }
 
         embed.setColor('GREEN')
         embed.setTitle(`Update a setting?`)
