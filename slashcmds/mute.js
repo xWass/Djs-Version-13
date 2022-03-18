@@ -19,8 +19,9 @@ module.exports = {
             .setName('reason')
             .setDescription('Reason for muting this user.')),
 
-    async execute(interaction) {
-
+    async execute(interaction, client) {
+        let id = interaction.guild.id
+        const settings = await client.db.collection("settings").findOne({ guildid: id })
         const user = await interaction.options.getUser('user') || null
         const mem = await interaction.options.getMember('user') || null
         const res = await interaction.options.getString('reason') || null
@@ -74,35 +75,51 @@ module.exports = {
                     .setLabel('Cancel')
                     .setStyle('DANGER')
             );
-        await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
+        if (settings.enabled) {
+            await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
 
-        const response = await interaction.channel
-            .awaitMessageComponent({
-                filter: (i) => {
-                    row.components[0].setDisabled(true);
-                    row.components[1].setDisabled(true);
-                    return i.customId === 'yes' || i.customId === 'no';
-                },
-                time: 15000
-            })
-            .catch(() => null);
+            const response = await interaction.channel
+                .awaitMessageComponent({
+                    filter: (i) => {
+                        row.components[0].setDisabled(true);
+                        row.components[1].setDisabled(true);
+                        return i.customId === 'yes' || i.customId === 'no';
+                    },
+                    time: 15000
+                })
+                .catch(() => null);
 
-        if (response === null) {
-            embed.setColor('DARK_RED')
-            embed.setTitle('Interaction timed out!')
-            embed.setDescription('The response time for the command has expired')
-            embed.setFooter('Enter the command again please')
-            await interaction.followUp({ embeds: [embed], ephemeral: true })
-            return;
-        }
+            if (response === null) {
+                embed.setColor('DARK_RED')
+                embed.setTitle('Interaction timed out!')
+                embed.setDescription('The response time for the command has expired')
+                embed.setFooter('Enter the command again please')
+                await interaction.followUp({ embeds: [embed], ephemeral: true })
+                return;
+            }
 
-        row.components[0].setDisabled(true);
-        row.components[1].setDisabled(true);
-        await response.update({
-            components: [row]
-        });
+            row.components[0].setDisabled(true);
+            row.components[1].setDisabled(true);
+            await response.update({
+                components: [row]
+            });
 
-        if (response.customId === 'yes') {
+            if (response.customId === 'yes') {
+                embed.setColor('GREEN')
+                embed.setTitle('Member has been muted')
+                embed.setDescription(`<@${user.id}> has been muted.\nModerator: **${interaction.user.tag}**\nDuration: **${t}**\nReason: **${res}**`)
+                embed.setFooter('Thanks for using me!')
+                await mem.timeout(tt, res)
+                await interaction.followUp({ embeds: [embed] });
+                return;
+            } else {
+                embed.setColor('GREEN')
+                embed.setTitle('Cancelled!')
+                embed.setDescription('<:Success:949853804155793450> The command was successfully cancelled')
+                embed.setFooter('You can use another command')
+                await interaction.followUp({ embeds: [embed], ephemeral: true });
+            }
+        } else {
             embed.setColor('GREEN')
             embed.setTitle('Member has been muted')
             embed.setDescription(`<@${user.id}> has been muted.\nModerator: **${interaction.user.tag}**\nDuration: **${t}**\nReason: **${res}**`)
@@ -110,12 +127,7 @@ module.exports = {
             await mem.timeout(tt, res)
             await interaction.followUp({ embeds: [embed] });
             return;
-        } else {
-            embed.setColor('GREEN')
-            embed.setTitle('Cancelled!')
-            embed.setDescription('<:Success:949853804155793450> The command was successfully cancelled')
-            embed.setFooter('You can use another command')
-            await interaction.followUp({ embeds: [embed], ephemeral: true });
+
         }
     }
 }

@@ -80,7 +80,11 @@ for (const file of commandFiles) {
 
 client.on('interactionCreate', async interaction => {
     if (!interaction.isCommand()) return;
-
+    let id = interaction.guild.id
+    let found = await client.db.collection("settings").findOne({ guildid:id })
+    if (!found) {
+        await client.db.collection("settings").insertOne({ guildid:id, enabled:true })
+    }
     const command = client.SlashCommands.get(interaction.commandName);
 
     if (!command) return;
