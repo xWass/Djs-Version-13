@@ -81,6 +81,7 @@ module.exports = {
             if (!found) {
                 await client.db.collection("settings").insertOne({ guildid:id })
             }
+            console.log(change)
             if (change === "enable") {
                 console.log("made it to enable")
                 //update to enable here
