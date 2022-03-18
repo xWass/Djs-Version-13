@@ -2,7 +2,7 @@ const fs = require('fs');
 const chalk = require('chalk');
 const axios = require('axios')
 const { Client, Collection, Intents, MessageEmbed } = require('discord.js');
-//const MongoClient = require('mongodb').MongoClient
+const MongoClient = require('mongodb').MongoClient
 const intents = new Intents();
 intents.add(
     Intents.FLAGS.GUILDS,
@@ -34,15 +34,15 @@ for (const file of commandFiles) {
     commands.push(command.data.toJSON());
 }
 
-/*
+// DB HERE
 const databaseConnect = async () => {
     const mongoClient = new MongoClient(process.env.MONGO);
     await mongoClient.connect()
-    const database = mongoClient.db("database name")
+    const database = mongoClient.db("Diomedes")
     client.db = database;
     console.log("Connected to the database!")
 }
-*/
+
 
 const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 (async () => {
@@ -60,7 +60,7 @@ const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 })();
 
 client.on("ready", async () => {
-    //databaseConnect()
+    databaseConnect()
     client.user.setActivity(`Slash Commands!`, { type: "LISTENING" })
 });
 
