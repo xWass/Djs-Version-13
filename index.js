@@ -154,4 +154,3 @@ client.on("messageCreate", async (message) => {
 });
 
 client.login(process.env.TOKEN);
-// this line is for an empty commit
