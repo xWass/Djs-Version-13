@@ -19,7 +19,7 @@ module.exports = {
             .addChoice("Disable", "disable")
         ),
 
-    async execute(interaction) {
+    async execute(interaction, client) {
         const set = interaction.options.getString("setting");
         const change = interaction.options.getString("change");
 
