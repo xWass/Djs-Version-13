@@ -125,7 +125,7 @@ module.exports = {
             embed.setDescription(`<@${user.id}> has been muted.\nModerator: **${interaction.user.tag}**\nDuration: **${t}**\nReason: **${res}**`)
             embed.setFooter('Thanks for using me!')
             await mem.timeout(tt, res)
-            await interaction.followUp({ embeds: [embed] });
+            await interaction.reply({ embeds: [embed] });
             return;
 
         }
