@@ -9,9 +9,7 @@ module.exports = {
             .setName('user')
             .setDescription('The member to ban')),
     async execute(interaction, client) {
-
-        let user = interaction.options.getUser('user');
-        let mem = interaction.options.getMember('user');
+        let id = interaction.guild.id
         const settings = await client.db.collection("settings").findOne({ guildid: id })
 
 
