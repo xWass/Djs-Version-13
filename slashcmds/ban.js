@@ -10,8 +10,8 @@ module.exports = {
             .setDescription('The member to ban')),
     async execute(interaction, client) {
 
-        const user = interaction.options.getUser('user');
-        const mem = interaction.options.getMember('user');
+        let user = interaction.options.getUser('user');
+        let mem = interaction.options.getMember('user');
         const settings = await client.db.collection("settings").findOne({ guildid: id })
 
 
@@ -38,7 +38,8 @@ module.exports = {
             return;
         }
         if (settings.enabled) {
-
+            let user = interaction.options.getUser('user');
+            let mem = interaction.options.getMember('user');
             embed.setColor('DARK_RED')
             embed.setTitle(`Ban a member?`)
             embed.setDescription(`Are you sure you want to ban <@${user.id}>?`)
