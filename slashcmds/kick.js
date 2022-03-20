@@ -12,7 +12,8 @@ module.exports = {
             .setName('reason')
             .setDescription('Reason for kicking this user.')),
 
-    async execute(interaction) {
+    async execute(interaction, client) {
+        const settings = await client.db.collection("settings").findOne({ guildid: id })
 
         const user = interaction.options.getUser('user');
         const mem = interaction.options.getMember('user');
@@ -40,64 +41,73 @@ module.exports = {
             await interaction.reply({ embeds: [embed], ephemeral: true })
             return;
         }
+        if (settings.enabled) {
 
-        embed.setColor('GREEN')
-        embed.setTitle(`Kick a member?`)
-        embed.setDescription(`Are you sure you want to kick <@${user.id}>?`)
-        embed.setFooter(`ID: ${user.id}`)
+            embed.setColor('GREEN')
+            embed.setTitle(`Kick a member?`)
+            embed.setDescription(`Are you sure you want to kick <@${user.id}>?`)
+            embed.setFooter(`ID: ${user.id}`)
 
-        const row = new MessageActionRow()
-            .addComponents(
-                new MessageButton()
-                    .setCustomId('yes')
-                    .setLabel('Confirm')
-                    .setStyle('SUCCESS')
-            )
-            .addComponents(
-                new MessageButton()
-                    .setCustomId('no')
-                    .setLabel('Cancel')
-                    .setStyle('DANGER')
-            );
-        await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
+            const row = new MessageActionRow()
+                .addComponents(
+                    new MessageButton()
+                        .setCustomId('yes')
+                        .setLabel('Confirm')
+                        .setStyle('SUCCESS')
+                )
+                .addComponents(
+                    new MessageButton()
+                        .setCustomId('no')
+                        .setLabel('Cancel')
+                        .setStyle('DANGER')
+                );
+            await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
 
-        const response = await interaction.channel
-            .awaitMessageComponent({
-                filter: (i) => {
-                    row.components[0].setDisabled(true);
-                    row.components[1].setDisabled(true);
-                    return i.customId === 'yes' || i.customId === 'no';
-                },
-                time: 15000
-            })
-            .catch(() => null);
+            const response = await interaction.channel
+                .awaitMessageComponent({
+                    filter: (i) => {
+                        row.components[0].setDisabled(true);
+                        row.components[1].setDisabled(true);
+                        return i.customId === 'yes' || i.customId === 'no';
+                    },
+                    time: 15000
+                })
+                .catch(() => null);
 
-        if (response === null) {
-            embed.setColor('DARK_RED')
-            embed.setTitle("Interaction timed out!")
-            embed.setDescription('The response time for the command has expired')
-            embed.setFooter('Enter the command again please')
-            await interaction.followUp({ embeds: [embed], ephemeral: true })
-            return;
-        }
+            if (response === null) {
+                embed.setColor('DARK_RED')
+                embed.setTitle("Interaction timed out!")
+                embed.setDescription('The response time for the command has expired')
+                embed.setFooter('Enter the command again please')
+                await interaction.followUp({ embeds: [embed], ephemeral: true })
+                return;
+            }
 
-        row.components[0].setDisabled(true);
-        row.components[1].setDisabled(true);
-        await response.update({ components: [row] });
+            row.components[0].setDisabled(true);
+            row.components[1].setDisabled(true);
+            await response.update({ components: [row] });
 
-        if (response.customId === 'yes') {
+            if (response.customId === 'yes') {
+                await mem.kick(res)
+                embed.setColor('GREEN')
+                embed.setTitle(`Member has been kicked`)
+                embed.setDescription(`<:Success:949853804155793450> **${user.tag}** has been kicked.\nModerator: **${interaction.user.tag}**\nReason: **${res}**`)
+                await interaction.followUp({ embeds: [embed] });
+                return;
+            } else {
+                embed.setColor('GREEN')
+                embed.setTitle('Cancelled!')
+                embed.setDescription('<:Success:949853804155793450> The command was successfully cancelled')
+                embed.setFooter('You can use another command')
+                await interaction.followUp({ embeds: [embed], ephemeral: true });
+            }
+        } else {
             await mem.kick(res)
             embed.setColor('GREEN')
             embed.setTitle(`Member has been kicked`)
             embed.setDescription(`<:Success:949853804155793450> **${user.tag}** has been kicked.\nModerator: **${interaction.user.tag}**\nReason: **${res}**`)
-            await interaction.followUp({ embeds: [embed] });
-            return;
-        } else {
-            embed.setColor('GREEN')
-            embed.setTitle('Cancelled!')
-            embed.setDescription('<:Success:949853804155793450> The command was successfully cancelled')
-            embed.setFooter('You can use another command')
-            await interaction.followUp({ embeds: [embed], ephemeral: true });
+            await interaction.reply({ embeds: [embed] });
+
         }
     }
 }

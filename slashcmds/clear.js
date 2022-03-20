@@ -8,10 +8,11 @@ module.exports = {
         .addIntegerOption((option) => option
             .setName('amount')
             .setDescription('The number of messages to clear! 1-100')),
-    async execute(interaction) {
+    async execute(interaction, client) {
 
         const amount = interaction.options.getInteger('amount');
         const embed = new MessageEmbed()
+        const settings = await client.db.collection("settings").findOne({ guildid: id })
 
         if (!interaction.member.permissions.has('MANAGE_MESSAGES')) {
             embed.setColor('DARK_RED')
@@ -33,64 +34,74 @@ module.exports = {
             await interaction.reply({ embeds: [embed], ephemeral: true })
             return;
         }
+        if (settings.enabled) {
+            embed.setColor('GREEN')
+            embed.setTitle('Clear Messages?')
+            embed.setDescription(`Are you sure you want to clear **${amount}** messages?`)
 
-        embed.setColor('GREEN')
-        embed.setTitle('Clear Messages?')
-        embed.setDescription(`Are you sure you want to clear **${amount}** messages?`)
+            const row = new MessageActionRow()
+                .addComponents(
+                    new MessageButton()
+                        .setCustomId('yes')
+                        .setLabel('Confirm')
+                        .setStyle('SUCCESS')
+                )
+                .addComponents(
+                    new MessageButton()
+                        .setCustomId('no')
+                        .setLabel('Cancel')
+                        .setStyle('DANGER')
+                );
+            await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
 
-        const row = new MessageActionRow()
-            .addComponents(
-                new MessageButton()
-                    .setCustomId('yes')
-                    .setLabel('Confirm')
-                    .setStyle('SUCCESS')
-            )
-            .addComponents(
-                new MessageButton()
-                    .setCustomId('no')
-                    .setLabel('Cancel')
-                    .setStyle('DANGER')
-            );
-        await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
+            const response = await interaction.channel
+                .awaitMessageComponent({
+                    filter: (i) => {
+                        row.components[0].setDisabled(true);
+                        row.components[1].setDisabled(true);
+                        return i.customId === 'yes' || i.customId === 'no';
+                    },
+                    time: 15000
+                })
+                .catch(() => null);
 
-        const response = await interaction.channel
-            .awaitMessageComponent({
-                filter: (i) => {
-                    row.components[0].setDisabled(true);
-                    row.components[1].setDisabled(true);
-                    return i.customId === 'yes' || i.customId === 'no';
-                },
-                time: 15000
-            })
-            .catch(() => null);
+            if (response === null) {
+                embed.setColor('DARK_RED')
+                embed.setTitle("Interaction timed out!")
+                embed.setDescription('The response time for the command has expired')
+                embed.setFooter('Enter the command again please')
+                await interaction.followUp({ embeds: [embed], ephemeral: true })
+            }
 
-        if (response === null) {
-            embed.setColor('DARK_RED')
-            embed.setTitle("Interaction timed out!")
-            embed.setDescription('The response time for the command has expired')
-            embed.setFooter('Enter the command again please')
-            await interaction.followUp({ embeds: [embed], ephemeral: true })
-        }
+            row.components[0].setDisabled(true);
+            row.components[1].setDisabled(true);
+            await response.update({ components: [row] });
 
-        row.components[0].setDisabled(true);
-        row.components[1].setDisabled(true);
-        await response.update({ components: [row] });
+            if (response.customId === 'yes') {
+                embed.setColor('GREEN')
+                embed.setTitle('I successfully deleted the messages')
+                embed.setDescription(`Amount: **${amount}**\nModerator: **${interaction.user.tag}**`)
+                embed.setFooter('Thanks for using me!')
+                await interaction.channel.bulkDelete(amount);
 
-        if (response.customId === 'yes') {
+                await interaction.followUp({ embeds: [embed], ephemeral: false });
+            } else {
+                embed.setColor('DARK_RED')
+                embed.setTitle("Interaction cancelled!")
+                embed.setDescription('<:Success:949853804155793450> The command was successfully cancelled')
+                embed.setFooter('You can use another command')
+
+                await interaction.followUp({ embeds: [embed], ephemeral: true });
+            }
+        } else {
             embed.setColor('GREEN')
             embed.setTitle('I successfully deleted the messages')
             embed.setDescription(`Amount: **${amount}**\nModerator: **${interaction.user.tag}**`)
             embed.setFooter('Thanks for using me!')
             await interaction.channel.bulkDelete(amount);
 
-            await interaction.followUp({ embeds: [embed], ephemeral: false });
-        } else {
-            embed.setColor('DARK_RED')
-            embed.setTitle("Interaction cancelled!")
-            embed.setDescription('<:Success:949853804155793450> The command was successfully cancelled')
-            embed.setFooter('You can use another command')
+            await interaction.reply({ embeds: [embed], ephemeral: false });
 
-            await interaction.followUp({ embeds: [embed], ephemeral: true });
         }
     }
 }

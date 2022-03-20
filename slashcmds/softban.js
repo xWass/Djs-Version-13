@@ -14,11 +14,12 @@ module.exports = {
             .setName('invite')
             .setDescription('Invite the user back? (y/n)')),
 
-    async execute(interaction) {
+    async execute(interaction, client) {
 
         const user = interaction.options.getUser('user');
         const mem = interaction.options.getMember('user');
         const inv = interaction.options.getString('invite');
+        const settings = await client.db.collection("settings").findOne({ guildid: id })
         const embed = new MessageEmbed()
 
         if (!interaction.member.permissions.has('BAN_MEMBERS')) {
@@ -42,61 +43,116 @@ module.exports = {
             await interaction.reply({ embeds: [embed], ephemeral: true })
             return;
         }
+        if (settings.enabled) {
 
-        embed.setColor('GREEN')
-        embed.setTitle(`Softban a member?`)
-        embed.setDescription(`Are you sure you want to softban <@${user.id}>?`)
+            embed.setColor('GREEN')
+            embed.setTitle(`Softban a member?`)
+            embed.setDescription(`Are you sure you want to softban <@${user.id}>?`)
 
-        const row = new MessageActionRow()
-            .addComponents(
-                new MessageButton()
-                    .setCustomId('yes')
-                    .setLabel('Confirm')
-                    .setStyle('SUCCESS')
-            )
-            .addComponents(
-                new MessageButton()
-                    .setCustomId('no')
-                    .setLabel('Cancel')
-                    .setStyle('DANGER')
-            );
-        await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
+            const row = new MessageActionRow()
+                .addComponents(
+                    new MessageButton()
+                        .setCustomId('yes')
+                        .setLabel('Confirm')
+                        .setStyle('SUCCESS')
+                )
+                .addComponents(
+                    new MessageButton()
+                        .setCustomId('no')
+                        .setLabel('Cancel')
+                        .setStyle('DANGER')
+                );
+            await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
 
-        const response = await interaction.channel
-            .awaitMessageComponent({
-                filter: (i) => {
-                    row.components[0].setDisabled(true);
-                    row.components[1].setDisabled(true);
-                    return i.customId === 'yes' || i.customId === 'no';
-                },
-                time: 15000
-            })
-            .catch(() => null);
-
-        if (response === null) {
-            embed.setColor('DARK_RED')
-            embed.setTitle('Interaction timed out!')
-            embed.setDescription('The response time for the command has expired')
-            embed.setFooter('Enter the command again please')
-            await interaction.followUp({ embeds: [embed], ephemeral: true })
-        }
-
-        row.components[0].setDisabled(true);
-        row.components[1].setDisabled(true);
-        await response.update({ components: [row] });
-
-        if (response.customId === 'yes') {
-            if (inv === null) {
-                embed.setColor('GREEN')
-                embed.setTitle('Member has been softbanned')
-                embed.setDescription(`**${user.tag}** has been softbanned\nModerator: **${interaction.user.tag}**`)
-                embed.setFooter('Thanks for using me!')
-                await interaction.guild.members.ban(user.id, {
-                    days: 7
+            const response = await interaction.channel
+                .awaitMessageComponent({
+                    filter: (i) => {
+                        row.components[0].setDisabled(true);
+                        row.components[1].setDisabled(true);
+                        return i.customId === 'yes' || i.customId === 'no';
+                    },
+                    time: 15000
                 })
-                await interaction.guild.bans.remove(user.id)
-                await interaction.followUp({ embeds: [embed] });
-            } else if (inv === "y") {
+                .catch(() => null);
+
+            if (response === null) {
+                embed.setColor('DARK_RED')
+                embed.setTitle('Interaction timed out!')
+                embed.setDescription('The response time for the command has expired')
+                embed.setFooter('Enter the command again please')
+                await interaction.followUp({ embeds: [embed], ephemeral: true })
+            }
+
+            row.components[0].setDisabled(true);
+            row.components[1].setDisabled(true);
+            await response.update({ components: [row] });
+
+            if (response.customId === 'yes') {
+                if (inv === null) {
+                    embed.setColor('GREEN')
+                    embed.setTitle('Member has been softbanned')
+                    embed.setDescription(`**${user.tag}** has been softbanned\nModerator: **${interaction.user.tag}**`)
+                    embed.setFooter('Thanks for using me!')
+                    await interaction.guild.members.ban(user.id, {
+                        days: 7
+                    })
+                    await interaction.guild.bans.remove(user.id)
+                    await interaction.followUp({ embeds: [embed] });
+                } else if (inv === "y") {
+                    let invite = await interaction.channel.createInvite({
+                        maxAge: 604800,
+                        maxUses: 1
+                    })
+
+                    embed.setColor('GREEN')
+                    embed.setTitle('You were softbanned from a server')
+                    embed.setDescription(`<:Success:949853804155793450> Heres an invite back:\n**${invite}**`)
+                    await user.send({ embeds: [embed], ephemeral: false })
+                    await interaction.guild.members.ban(user.id, {
+                        days: 7
+                    })
+
+                    await interaction.guild.bans.remove(user.id)
+                    embed.setColor('GREEN')
+                    embed.setTitle('Member has been softbanned')
+                    embed.setDescription(`**${user.tag}** has been softbanned.\nModerator: **${interaction.user.tag}**\nThis user was invited back!`)
+                    embed.setFooter('Thanks for using me!')
+                    await interaction.followUp({ embeds: [embed], ephemeral: false });
+                    return;
+                } else if (inv === "n") {
+                    embed.setColor('GREEN')
+                    embed.setTitle('Member has been softbanned')
+                    embed.setDescription(`**${user.tag}** has been softbanned.\nModerator: **${interaction.user.tag}**\nThis user was not invited back!`)
+                    embed.setFooter('Thanks for using me!')
+                    await interaction.guild.members.ban(user.id, {
+                        days: 7
+                    })
+
+                    await interaction.guild.bans.remove(user.id)
+                    await interaction.followUp({ embeds: [embed], ephemeral: false });
+                    return;
+                } else {
+                    embed.setColor('GREEN')
+                    embed.setTitle('Member has been softbanned')
+                    embed.setDescription(`**${user.tag}** has been softbanned.\nModerator: **${interaction.user.tag}**\nThis user was not reinvited!`)
+                    embed.setFooter('Thanks for using me!')
+                    await interaction.guild.members.ban(user.id, {
+                        days: 7
+                    })
+
+                    await interaction.guild.bans.remove(user.id)
+                    await interaction.followUp({ embeds: [embed] });
+                    return;
+
+                }
+            } else
+                embed.setColor('GREEN')
+            embed.setTitle('Cancelled!')
+            embed.setDescription('<:Success:949853804155793450> The command was successfully cancelled')
+            embed.setFooter('You can use another command')
+            await interaction.followUp({ embeds: [embed], ephemeral: true });
+        } else {
+            if (inv === "y") {
                 let invite = await interaction.channel.createInvite({
                     maxAge: 604800,
                     maxUses: 1
@@ -115,7 +171,7 @@ module.exports = {
                 embed.setTitle('Member has been softbanned')
                 embed.setDescription(`**${user.tag}** has been softbanned.\nModerator: **${interaction.user.tag}**\nThis user was invited back!`)
                 embed.setFooter('Thanks for using me!')
-                await interaction.followUp({ embeds: [embed], ephemeral: false });
+                await interaction.reply({ embeds: [embed], ephemeral: false });
                 return;
             } else if (inv === "n") {
                 embed.setColor('GREEN')
@@ -127,7 +183,7 @@ module.exports = {
                 })
 
                 await interaction.guild.bans.remove(user.id)
-                await interaction.followUp({ embeds: [embed], ephemeral: false });
+                await interaction.reply({ embeds: [embed], ephemeral: false });
                 return;
             } else {
                 embed.setColor('GREEN')
@@ -139,15 +195,9 @@ module.exports = {
                 })
 
                 await interaction.guild.bans.remove(user.id)
-                await interaction.followUp({ embeds: [embed] });
+                await interaction.reply({ embeds: [embed] });
                 return;
-
             }
-        } else
-        embed.setColor('GREEN')
-        embed.setTitle('Cancelled!')
-        embed.setDescription('<:Success:949853804155793450> The command was successfully cancelled')
-        embed.setFooter('You can use another command')
-        await interaction.followUp({ embeds: [embed], ephemeral: true });
+        }
     }
 }
