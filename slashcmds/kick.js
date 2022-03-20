@@ -13,6 +13,7 @@ module.exports = {
             .setDescription('Reason for kicking this user.')),
 
     async execute(interaction, client) {
+        let id = interaction.guild.id
         const settings = await client.db.collection("settings").findOne({ guildid: id })
 
         const user = interaction.options.getUser('user');
