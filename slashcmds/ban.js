@@ -11,7 +11,8 @@ module.exports = {
     async execute(interaction, client) {
         let id = interaction.guild.id
         const settings = await client.db.collection("settings").findOne({ guildid: id })
-
+        const user = interaction.options.getUser('user');
+        const mem = interaction.options.getMember('user');
 
         const embed = new MessageEmbed()
         if (!interaction.member.permissions.has('BAN_MEMBERS')) {
