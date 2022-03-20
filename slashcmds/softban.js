@@ -19,6 +19,7 @@ module.exports = {
         const user = interaction.options.getUser('user');
         const mem = interaction.options.getMember('user');
         const inv = interaction.options.getString('invite');
+        let id = interaction.guild.id
         const settings = await client.db.collection("settings").findOne({ guildid: id })
         const embed = new MessageEmbed()
 
