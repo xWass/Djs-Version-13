@@ -7,6 +7,7 @@ module.exports = {
     async execute(client, message, args) {
         let mem = message.mentions.members.first()
         const embed = new MessageEmbed()
+        let id = message.guild.id
         const settings = await client.db.collection("settings").findOne({ guildid: id })
 
         if (!message.member.permissions.has('MODERATE_MEMBERS')) {
@@ -50,7 +51,7 @@ module.exports = {
         if (settings.enabled) {
             embed.setColor('DARK_RED')
             embed.setTitle(`Mute a member?`)
-            embed.setDescription(`Are you sure you want to mute <@${mem.id}>?`)
+            embed.setDescription(`Are you sure you want to mute ${mem.id}?`)
 
             const row = new MessageActionRow()
                 .addComponents(

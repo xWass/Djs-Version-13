@@ -6,6 +6,8 @@ module.exports = {
     description: "Ban a member.",
     async execute(client, message, args) {
         let mem = message.mentions.members.first()
+        let id = message.guild.id
+
         const settings = await client.db.collection("settings").findOne({ guildid: id })
 
         const embed = new MessageEmbed()

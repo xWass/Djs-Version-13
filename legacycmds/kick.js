@@ -7,6 +7,8 @@ module.exports = {
     async execute(client, message, args) {
         let mem = message.mentions.members.first()
         const embed = new MessageEmbed()
+        let id = message.guild.id
+
         const settings = await client.db.collection("settings").findOne({ guildid: id })
 
         if (!message.member.permissions.has('KICK_MEMBERS')) {
