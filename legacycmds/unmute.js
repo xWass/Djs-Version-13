@@ -36,7 +36,5 @@ module.exports = {
             embed.setDescription(`${mem.user.tag} has been unmuted.\nModerator: **${message.author.tag}**`)
             embed.setFooter(`ID: ${mem.id}`)
             await message.reply({ embeds: [embed], ephemeral: false, })
-
-
     }
 }

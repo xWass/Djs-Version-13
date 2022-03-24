@@ -1,4 +1,3 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
 
 module.exports = {
@@ -7,6 +6,8 @@ module.exports = {
     description: "Ban a member.",
     async execute(client, message, args) {
         let mem = message.mentions.members.first()
+        const settings = await client.db.collection("settings").findOne({ guildid: id })
+
         const embed = new MessageEmbed()
         if (!message.member.permissions.has('BAN_MEMBERS')) {
             embed.setColor('DARK_RED')
@@ -35,57 +36,71 @@ module.exports = {
             await message.reply({ embeds: [embed], ephemeral: true, })
             return;
         }
-
-        embed.setColor('DARK_RED')
-        embed.setTitle(`Ban a member?`)
-        embed.setDescription(`Are you sure you want to ban <@${mem.id}>?`)
-
-        const row = new MessageActionRow()
-            .addComponents(
-                new MessageButton()
-                    .setCustomId('yes')
-                    .setLabel('Confirm')
-                    .setStyle('SUCCESS')
-            )
-            .addComponents(
-                new MessageButton()
-                    .setCustomId('no')
-                    .setLabel('Cancel')
-                    .setStyle('DANGER')
-            );
-        await message.reply({ embeds: [embed], components: [row], ephemeral: true });
-
-        const response = await message.channel
-            .awaitMessageComponent({
-                filter: (i) => {
-                    const isInteractionUser = i.user.id === message.author.id;
-
-                    if (!isInteractionUser) {
-                        return false;
-                    }
-                    row.components[0].setDisabled(true);
-                    row.components[1].setDisabled(true);
-                    return i.customId === 'yes' || i.customId === 'no';
-                },
-                time: 15000
-            })
-            .catch(() => null);
-
-        if (response === null) {
+        if (settings.enabled) {
             embed.setColor('DARK_RED')
-            embed.setTitle('message timed out!')
-            embed.setDescription('The response time for the command has expired')
-            embed.setFooter('Enter the command again please')
-            await message.reply({ embeds: [embed], ephemeral: true })
-            return;
-        }
+            embed.setTitle(`Ban a member?`)
+            embed.setDescription(`Are you sure you want to ban <@${mem.id}>?`)
 
-        row.components[0].setDisabled(true);
-        row.components[1].setDisabled(true);
+            const row = new MessageActionRow()
+                .addComponents(
+                    new MessageButton()
+                        .setCustomId('yes')
+                        .setLabel('Confirm')
+                        .setStyle('SUCCESS')
+                )
+                .addComponents(
+                    new MessageButton()
+                        .setCustomId('no')
+                        .setLabel('Cancel')
+                        .setStyle('DANGER')
+                );
+            await message.reply({ embeds: [embed], components: [row], ephemeral: true });
 
-        await response.update({ components: [row] });
+            const response = await message.channel
+                .awaitMessageComponent({
+                    filter: (i) => {
+                        const isInteractionUser = i.user.id === message.author.id;
 
-        if (response.customId === 'yes') {
+                        if (!isInteractionUser) {
+                            return false;
+                        }
+                        row.components[0].setDisabled(true);
+                        row.components[1].setDisabled(true);
+                        return i.customId === 'yes' || i.customId === 'no';
+                    },
+                    time: 15000
+                })
+                .catch(() => null);
+
+            if (response === null) {
+                embed.setColor('DARK_RED')
+                embed.setTitle('message timed out!')
+                embed.setDescription('The response time for the command has expired')
+                embed.setFooter('Enter the command again please')
+                await message.reply({ embeds: [embed], ephemeral: true })
+                return;
+            }
+
+            row.components[0].setDisabled(true);
+            row.components[1].setDisabled(true);
+
+            await response.update({ components: [row] });
+
+            if (response.customId === 'yes') {
+                embed.setColor('GREEN')
+                embed.setTitle('Member has been banned')
+                embed.setDescription(`<:Success:949853804155793450> **${mem.user.tag}** has been banned.\nModerator: **${message.author.tag}**`)
+                embed.setFooter(`ID: ${mem.id}`)
+
+                await message.guild.members.ban(mem.id)
+                await message.reply({ embeds: [embed], ephemeral: false });
+            } else {
+                embed.setTitle('Cancelled!')
+                embed.setDescription('<:Success:949853804155793450> The command was successfully cancelled')
+                embed.setFooter('You can use another command')
+                await message.reply({ embeds: [embed], ephemeral: true });
+            }
+        } else {
             embed.setColor('GREEN')
             embed.setTitle('Member has been banned')
             embed.setDescription(`<:Success:949853804155793450> **${mem.user.tag}** has been banned.\nModerator: **${message.author.tag}**`)
@@ -93,11 +108,7 @@ module.exports = {
 
             await message.guild.members.ban(mem.id)
             await message.reply({ embeds: [embed], ephemeral: false });
-        } else {
-            embed.setTitle('Cancelled!')
-            embed.setDescription('<:Success:949853804155793450> The command was successfully cancelled')
-            embed.setFooter('You can use another command')
-            await message.reply({ embeds: [embed], ephemeral: true });
+
         }
     }
 }
