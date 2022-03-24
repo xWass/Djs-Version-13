@@ -45,7 +45,7 @@ RAM: ${totalMemMb} MB
 RAM Usage: ${usedMemMb} MB
 \`\`\`
 `)
-            .setFooter('Bot version: v1.0.1.2')
+            .setFooter('Bot version: v1.0.1.3')
 
         await interaction.reply({ embeds: [embed] })
     }
