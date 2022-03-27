@@ -31,19 +31,21 @@ module.exports = {
                     .setLabel('⚙️')
                     .setStyle('SUCCESS')
             );
-            altEmbed.setTitle('You recieved mail!')
-            altEmbed.setFooter('Thanks for using me!')
-            altEmbed.setColor('GREEN')
-            await message.reply({ embeds: [altEmbed] })
-        try {
-            message.member.send({ embeds: [embed], components: [row] })
-        } catch {
-            altEmbed.setTitle('Never mind! It appears your dms are closed.')
-            altEmbed.setFooter('Thanks for using me!')
-            altEmbed.setColor('RED')
-
-            message.channel.send({ embeds: [altEmbed] })
-        }
+        altEmbed.setTitle('You recieved mail!')
+        altEmbed.setFooter('Thanks for using me!')
+        altEmbed.setColor('GREEN')
+        await message.reply({ embeds: [altEmbed] })
+        await message.member
+            .send({ embeds: [embed], components: [row] })
+            .catch((err) => {
+                altEmbed.setTitle('Never mind! It appears your dms are closed.')
+                altEmbed.setDescription(`Error: ${err.toString()}`)
+                altEmbed.setFooter('Thanks for using me!')
+                altEmbed.setColor('RED')
+    
+                message.channel.send({ embeds: [altEmbed] })
+    
+            });
         const response = await message.channel
             .awaitMessageComponent({
                 filter: (i) => {
@@ -58,10 +60,10 @@ module.exports = {
                 time: 15000
             })
             .catch(() => null);
-            if (response === null) {
-                return;
-                //me when
-            }
+        if (response === null) {
+            return;
+            //me when
+        }
 
         row.components[0].setDisabled(true);
         await response.update({ components: [row] });
