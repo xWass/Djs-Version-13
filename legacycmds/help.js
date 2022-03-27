@@ -36,7 +36,7 @@ module.exports = {
             altEmbed.setColor('GREEN')
             await message.reply({ embeds: [altEmbed] })
         try {
-            message.author.send({ embeds: [embed], components: [row] })
+            message.member.send({ embeds: [embed], components: [row] })
         } catch {
             altEmbed.setTitle('Never mind! It appears your dms are closed.')
             altEmbed.setFooter('Thanks for using me!')
@@ -47,7 +47,7 @@ module.exports = {
         const response = await message.channel
             .awaitMessageComponent({
                 filter: (i) => {
-                    const isInteractionUser = i.user.id === message.author.id;
+                    const isInteractionUser = i.user.id === message.member.id;
 
                     if (!isInteractionUser) {
                         return false;
@@ -58,7 +58,9 @@ module.exports = {
                 time: 15000
             })
             .catch(() => null);
-
+            if (response === null) {
+                return;
+            }
 
         row.components[0].setDisabled(true);
         await response.update({ components: [row] });
@@ -69,7 +71,7 @@ module.exports = {
             altEmbed.addFields(
                 { name: `Confirmation on Moderation Commands`, value: `Enables or disables the confirmation messages on moderation commands. \nUsage: \nType /settings and navigate through the options`, inline: true }
             )
-            await message.author.send({ embeds: [embed] });
+            await message.member.send({ embeds: [embed] });
         }
     }
 }
