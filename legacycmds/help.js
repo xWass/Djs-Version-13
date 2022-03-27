@@ -39,7 +39,7 @@ module.exports = {
             .send({ embeds: [embed], components: [row] })
             .catch((err) => {
                 altEmbed.setTitle('Never mind! It appears your dms are closed.')
-                altEmbed.setDescription(`Error: ${err.toString()}`)
+                altEmbed.setDescription(`Error: \n\`\`\`${err.toString()}\`\`\``)
                 altEmbed.setFooter('Thanks for using me!')
                 altEmbed.setColor('RED')
     
