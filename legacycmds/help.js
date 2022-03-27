@@ -8,7 +8,7 @@ module.exports = {
     async execute(client, message, args) {
 
         const embed = new MessageEmbed()
-
+        const altEmbed = new MessageEmbed()
         embed.setColor('GREEN')
         embed.setTitle('Bot Commands')
         embed.addFields(
@@ -31,8 +31,19 @@ module.exports = {
                     .setLabel('⚙️')
                     .setStyle('SUCCESS')
             );
-        await message.reply({ embeds: [embed], components: [row] });
+            altEmbed.setTitle('You recieved mail!')
+            altEmbed.setFooter('Thanks for using me!')
+            altEmbed.setColor('GREEN')
+            await message.reply({ embeds: [altEmbed] })
+        try {
+            message.author.send({ embeds: [embed], components: [row] })
+        } catch {
+            altEmbed.setTitle('Never mind! It appears your dms are closed.')
+            altEmbed.setFooter('Thanks for using me!')
+            altEmbed.setColor('RED')
 
+            message.channel.send({ embeds: [altEmbed] })
+        }
         const response = await message.channel
             .awaitMessageComponent({
                 filter: (i) => {
@@ -53,12 +64,12 @@ module.exports = {
         await response.update({ components: [row] });
 
         if (response.customId === 'yes') {
-            embed.setColor('GREEN')
-            embed.setTitle('Settings')
-            embed.addFields(
+            altEmbed.setColor('GREEN')
+            altEmbed.setTitle('Settings')
+            altEmbed.addFields(
                 { name: `Confirmation on Moderation Commands`, value: `Enables or disables the confirmation messages on moderation commands. \nUsage: \nType /settings and navigate through the options`, inline: true }
             )
-            await message.channel.send({ embeds: [embed] });
+            await message.author.send({ embeds: [embed] });
         }
     }
 }
