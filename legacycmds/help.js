@@ -2,9 +2,9 @@
 const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
 
 module.exports = {
-    name: "clear",
-    usage: "clear",
-    description: "Purge messages from a channel.",
+    name: "help",
+    usage: "help",
+    description: "Displays help message",
     async execute(client, message, args) {
 
         const embed = new MessageEmbed()
