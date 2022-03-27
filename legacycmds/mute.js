@@ -51,7 +51,7 @@ module.exports = {
         if (settings.enabled) {
             embed.setColor('DARK_RED')
             embed.setTitle(`Mute a member?`)
-            embed.setDescription(`Are you sure you want to mute ${mem.id}?`)
+            embed.setDescription(`Are you sure you want to mute <@${mem.id}>?`)
 
             const row = new MessageActionRow()
                 .addComponents(
