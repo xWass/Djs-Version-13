@@ -8,7 +8,7 @@ module.exports = {
 
         const embed = new MessageEmbed()
         let id = message.guild.id
-
+        const amount = args[0]
         const settings = await client.db.collection("settings").findOne({ guildid: id })
 
         if (!message.member.permissions.has('MANAGE_MESSAGES')) {
