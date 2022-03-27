@@ -60,6 +60,7 @@ module.exports = {
             .catch(() => null);
             if (response === null) {
                 return;
+                //me when
             }
 
         row.components[0].setDisabled(true);
