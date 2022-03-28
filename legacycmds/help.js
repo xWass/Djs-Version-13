@@ -74,7 +74,7 @@ module.exports = {
             altEmbed.addFields(
                 { name: `Confirmation on Moderation Commands`, value: `Enables or disables the confirmation messages on moderation commands. \nUsage: \nType /settings and navigate through the options`, inline: true }
             )
-            await message.member.send({ embeds: [embed] });
+            await message.member.send({ embeds: [altEmbed] });
         }
     }
 }
