@@ -76,7 +76,7 @@ module.exports = {
 
             if (response === null) {
                 embed.setColor('DARK_RED')
-                embed.setTitle('message timed out!')
+                embed.setTitle('Command timed out!')
                 embed.setDescription('The response time for the command has expired')
                 embed.setFooter('Enter the command again please')
                 await message.reply({ embeds: [embed], ephemeral: true })

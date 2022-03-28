@@ -47,23 +47,23 @@ module.exports = {
                 return;
 
             });
-        const response = await dm.channel
+        const interaction_ = await dm.channel
             .awaitMessageComponent({
-                filter: (i) => {
-                    row.components[0].setDisabled(true);
-                    return i.customId === 'yes';
-                },
-                time: 15000
+                filter: (i) => i.customId === 'yes',
+                time: 15_000
             })
             .catch(() => null);
-        if (response === null) {
-            return;
-        }
 
-        row.components[0].setDisabled(true);
-        await response.update({ components: [row] });
+        if (interaction_ === null) return;
 
-        if (response.customId === 'yes') {
+        for (const component_ of row.components)
+            if (!component_.disabled)
+                component_.setDisabled(true);
+
+        await interaction_.update({ components: [row] });
+
+
+        if (interaction_.customId === 'yes') {
             altEmbed.setColor('GREEN')
             altEmbed.setTitle('Settings')
             altEmbed.addFields(
