@@ -35,7 +35,7 @@ module.exports = {
         altEmbed.setFooter('Thanks for using me!')
         altEmbed.setColor('GREEN')
         await message.reply({ embeds: [altEmbed] })
-        await message.member
+        const dm = await message.member
             .send({ embeds: [embed], components: [row] })
             .catch((err) => {
                 altEmbed.setTitle('Never mind! It appears your dms are closed.')
@@ -44,12 +44,13 @@ module.exports = {
                 altEmbed.setColor('RED')
     
                 message.channel.send({ embeds: [altEmbed] })
+                return;
     
             });
-        const response = await message.channel
+        const response = await dm.channel
             .awaitMessageComponent({
                 filter: (i) => {
-                    const isInteractionUser = i.user.id === message.member.id;
+                    const isInteractionUser = i.user.id === message.author.id;
 
                     if (!isInteractionUser) {
                         return false;
@@ -62,7 +63,6 @@ module.exports = {
             .catch(() => null);
         if (response === null) {
             return;
-            //me when
         }
 
         row.components[0].setDisabled(true);
@@ -78,4 +78,3 @@ module.exports = {
         }
     }
 }
-
