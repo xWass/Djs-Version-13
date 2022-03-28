@@ -62,6 +62,8 @@ module.exports = {
             })
             .catch(() => null);
         if (response === null) {
+            row.components[0].setDisabled(true);
+            await response.update({ components: [row] });    
             return;
         }
 
