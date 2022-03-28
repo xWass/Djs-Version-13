@@ -42,19 +42,14 @@ module.exports = {
                 altEmbed.setDescription(`Error: \n\`\`\`${err.toString()}\`\`\``)
                 altEmbed.setFooter('Thanks for using me!')
                 altEmbed.setColor('RED')
-    
+
                 message.channel.send({ embeds: [altEmbed] })
                 return;
-    
+
             });
         const response = await dm.channel
             .awaitMessageComponent({
                 filter: (i) => {
-                    const isInteractionUser = i.user.id === message.author.id;
-
-                    if (!isInteractionUser) {
-                        return false;
-                    }
                     row.components[0].setDisabled(true);
                     return i.customId === 'yes';
                 },
@@ -62,8 +57,6 @@ module.exports = {
             })
             .catch(() => null);
         if (response === null) {
-            row.components[0].setDisabled(true);
-            await response.update({ components: [row] });    
             return;
         }
 
