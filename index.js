@@ -128,6 +128,7 @@ client.on("messageCreate", async (message) => {
                         .catch(() => undefined)
                     await message.member
                         .kick("Compromised account - sent scam link.")
+                    return;
                 }
             })
             .catch(() => null);
