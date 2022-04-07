@@ -139,7 +139,7 @@ client.on("messageCreate", async (message) => {
         let split = message.content.split(" ");
         let search = split[1]
         if (message.content.startsWith(prefix)) search = split[0].slice(prefix.length)
-        let command = client.LegacyCommands.get(search) || client.LegacyCommands.find((cmd) => cmd.aliases && cmd.aliases.includes(search)).catch(() => null);
+        let command = client.LegacyCommands.get(search) || client.LegacyCommands.find((cmd) => cmd.aliases && cmd.aliases.includes(search)).catch((err) => null);
 
         let i = 1;
         console.log(chalk.yellowBright('[EVENT FIRED]') + ` messageCreate with content: ${message.content}`);
