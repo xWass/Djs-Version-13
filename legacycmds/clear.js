@@ -105,7 +105,7 @@ module.exports = {
             embed.setDescription(`Amount: **${amount}**\nModerator: **${message.author.tag}**`)
             embed.setFooter('Thanks for using me!')
             await message.delete()
-            const tot = Number(args[0]) + 1
+            const tot = Number(args[0])
             await message.channel.bulkDelete(tot);
 
             await message.channel.send({ embeds: [embed] });
