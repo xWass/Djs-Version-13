@@ -71,6 +71,7 @@ module.exports = {
             row.components[1].setDisabled(true);
             await interaction.editReply({ components: [row] });
             await interaction.followUp({ embeds: [embed], ephemeral: true })
+            return;
         }
 
 
@@ -80,7 +81,6 @@ module.exports = {
             if (!found) {
                 await client.db.collection("settings").insertOne({ guildid: id })
             }
-            console.log(change)
             if (change === "enable") {
                 //update to enable here
                 await client.db.collection("settings").updateOne({ guildid: id }, { $set: { enabled: true } })
