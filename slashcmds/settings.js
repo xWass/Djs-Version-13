@@ -10,6 +10,7 @@ module.exports = {
             .setName("setting")
             .setDescription("Select \"ModConfirm\" to disable confirmation messages on moderation actions.")
             .addChoice("ModConfirm", "confirms")
+            .setRequired(true)
         )
 
         .addStringOption((stringOption) => stringOption
@@ -17,6 +18,7 @@ module.exports = {
             .setDescription("Enable or Disable?")
             .addChoice("Enable", "enable")
             .addChoice("Disable", "disable")
+            .setRequired(true)
         ),
 
     async execute(interaction, client) {
