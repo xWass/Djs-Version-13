@@ -51,7 +51,7 @@ module.exports = {
                         .setLabel('Cancel')
                         .setStyle('DANGER')
                 );
-            await message.reply({ embeds: [embed], components: [row] });
+            let sent = await message.reply({ embeds: [embed], components: [row] });
 
             const response = await message.channel
                 .awaitMessageComponent({
@@ -74,6 +74,9 @@ module.exports = {
                 embed.setTitle("Command timed out!")
                 embed.setDescription('The response time for the command has expired')
                 embed.setFooter('Enter the command again please')
+                row.components[0].setDisabled(true);
+                row.components[1].setDisabled(true);
+                sent.edit({ components: [row] })
                 await message.reply({ embeds: [embed] })
             }
 

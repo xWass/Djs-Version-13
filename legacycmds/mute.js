@@ -66,7 +66,7 @@ module.exports = {
                         .setLabel('Cancel')
                         .setStyle('DANGER')
                 );
-            await message.reply({ embeds: [embed], components: [row], ephemeral: true });
+            let sent = await message.reply({ embeds: [embed], components: [row], ephemeral: true });
 
             const response = await message.channel
                 .awaitMessageComponent({
@@ -89,15 +89,13 @@ module.exports = {
                 embed.setTitle('Interaction timed out!')
                 embed.setDescription('The response time for the command has expired')
                 embed.setFooter('Enter the command again please')
-
+                row.components[0].setDisabled(true);
+                row.components[1].setDisabled(true);
+                sent.edit({ components: [row] })
                 await message.reply({ embeds: [embed], ephemeral: true })
                 return;
             }
 
-            row.components[0].setDisabled(true);
-            row.components[1].setDisabled(true);
-
-            await response.update({ components: [row] });
 
             if (response.customId === 'yes') {
                 await mem.timeout(tt)
