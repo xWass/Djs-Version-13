@@ -81,9 +81,9 @@ for (const file of commandFiles) {
 client.on('interactionCreate', async interaction => {
     if (!interaction.isCommand()) return;
     let id = interaction.guild.id
-    let found = await client.db.collection("settings").findOne({ guildid:id })
+    let found = await client.db.collection("settings").findOne({ guildid: id })
     if (!found) {
-        await client.db.collection("settings").insertOne({ guildid:id, enabled:true })
+        await client.db.collection("settings").insertOne({ guildid: id, enabled: true })
     }
     const command = client.SlashCommands.get(interaction.commandName);
 
@@ -102,60 +102,66 @@ for (const file of legFiles) {
 }
 
 client.on("messageCreate", async (message) => {
-        await axios({
-            method: 'post',
-            url: 'https://anti-fish.bitflow.dev/check',
-            data: {
-                message: message.content
-            },
-            headers: { "User-Agent": "Diomedes (Moderation Bot)" }
-        })
-            .then(async response => {
-                if (response.data.match) {
-                    console.log(chalk.redBright(`[SCAM LINK] `) + ` ${message.content}`)
-                    await message.delete()
-                    let embed = new MessageEmbed()
-                        .setColor('DARK_RED')
-                        .setTitle("Scam Message Deleted!")
-                        .setDescription(`${message.author.tag} sent a scam link and it was deleted.`)
+    await axios({
+        method: 'post',
+        url: 'https://anti-fish.bitflow.dev/check',
+        data: {
+            message: message.content
+        },
+        headers: { "User-Agent": "Diomedes (Moderation Bot)" }
+    })
+        .then(async response => {
+            if (response.data.match) {
+                if (!message.member.permissions.has("MANAGE_MESSAGES")) return;
+                if (!message.guild.me.permissions.has("KICK_MEMBERS")) return;
+                console.log(chalk.redBright(`[SCAM LINK] `) + ` ${message.content}`)
+                let embed = new MessageEmbed()
+                    .setColor('DARK_RED')
+                    .setTitle("Scam Message Deleted!")
+                    .setDescription(`${message.author.tag} sent a scam link and it was deleted.`)
+                try {
+                    if (!message.member.kickable) return;
                     await message.channel
                         .send({ embeds: [embed] })
-
-                    if (!message.member.kickable) return;
-                    embed.setTitle("You were kicked from a server because you sent a scam link. \nThis could mean your account has been compromised.")
+                    await message.delete()
                     await message.member
                         .send({ embeds: [embed] })
                         .catch(() => undefined)
                     await message.member
                         .kick("Compromised account - sent scam link.")
+                } catch (error) {
                     return;
                 }
-            })
-            .catch(() => null);
 
-        if (message.author.bot) return
+                embed.setTitle("You were kicked from a server because you sent a scam link. \nThis could mean your account has been compromised.")
+                return;
+            }
+        })
+        .catch(() => undefined);
 
-        if (!message.content.startsWith(prefix)) return
+    if (message.author.bot) return
 
-        let split = message.content.split(" ");
-        let search = split[1]
-        if (message.content.startsWith(prefix)) search = split[0].slice(prefix.length)
-        let command = client.LegacyCommands.get(search) || client.LegacyCommands.find((cmd) => cmd.aliases && cmd.aliases.includes(search)).catch(() => null);
+    if (!message.content.startsWith(prefix)) return
 
-        let i = 1;
-        console.log(chalk.yellowBright('[EVENT FIRED]') + ` messageCreate with content: ${message.content}`);
+    let split = message.content.split(" ");
+    let search = split[1]
+    if (message.content.startsWith(prefix)) search = split[0].slice(prefix.length)
+    let command = client.LegacyCommands.get(search) || client.LegacyCommands.find((cmd) => cmd.aliases && cmd.aliases.includes(search)).catch(() => null);
 
-        if (message.content.startsWith(prefix)) i++;
-        while (i <= 2) {
-            i++;
-            split.shift();
-        };
-        try {
-            await command.execute(client, message, split)
-        } catch (err) {
-            message.reply(err.toString());
-            console.log(chalk.redBright('[ERROR]') + ` ${err}`);
-        }
+    let i = 1;
+    console.log(chalk.yellowBright('[EVENT FIRED]') + ` messageCreate with content: ${message.content}`);
+
+    if (message.content.startsWith(prefix)) i++;
+    while (i <= 2) {
+        i++;
+        split.shift();
+    };
+    try {
+        await command.execute(client, message, split)
+    } catch (err) {
+        message.reply(err.toString());
+        console.log(chalk.redBright('[ERROR]') + ` ${err}`);
+    }
 });
 
 client.login(process.env.TOKEN);

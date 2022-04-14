@@ -9,10 +9,12 @@ module.exports = {
 
         .addUserOption(option => option
             .setName('user')
+            .setRequired(true)
             .setDescription('The member to mute.'))
 
         .addStringOption(option => option
             .setName('time')
+            .setRequired(true)
             .setDescription('Time to mute for. (1m, 1h, 1d, 1w. 28 days max)'))
 
         .addStringOption(option => option
@@ -94,15 +96,13 @@ module.exports = {
                 embed.setTitle('Interaction timed out!')
                 embed.setDescription('The response time for the command has expired')
                 embed.setFooter('Enter the command again please')
+                row.components[0].setDisabled(true);
+                row.components[1].setDisabled(true);
+                await interaction.editReply({ components: [row] });
                 await interaction.followUp({ embeds: [embed], ephemeral: true })
                 return;
             }
 
-            row.components[0].setDisabled(true);
-            row.components[1].setDisabled(true);
-            await response.update({
-                components: [row]
-            });
 
             if (response.customId === 'yes') {
                 embed.setColor('GREEN')

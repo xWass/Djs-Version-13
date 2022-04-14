@@ -7,6 +7,7 @@ module.exports = {
         .setDescription('Clear an amount of messages from a channel')
         .addIntegerOption((option) => option
             .setName('amount')
+            .setRequired(true)
             .setDescription('The number of messages to clear! 1-100')),
     async execute(interaction, client) {
         let id = interaction.guild.id
@@ -65,17 +66,18 @@ module.exports = {
                 })
                 .catch(() => null);
 
+
             if (response === null) {
                 embed.setColor('DARK_RED')
                 embed.setTitle("Interaction timed out!")
                 embed.setDescription('The response time for the command has expired')
                 embed.setFooter('Enter the command again please')
+                row.components[0].setDisabled(true);
+                row.components[1].setDisabled(true);
+                await interaction.editReply({ components: [row] });
                 await interaction.followUp({ embeds: [embed], ephemeral: true })
             }
 
-            row.components[0].setDisabled(true);
-            row.components[1].setDisabled(true);
-            await response.update({ components: [row] });
 
             if (response.customId === 'yes') {
                 embed.setColor('GREEN')

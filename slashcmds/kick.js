@@ -7,6 +7,7 @@ module.exports = {
         .setDescription('Select a member and kick them.')
         .addUserOption(option => option
             .setName('user')
+            .setRequired(true)
             .setDescription('The member to kick'))
         .addStringOption(option => option
             .setName('reason')
@@ -80,13 +81,13 @@ module.exports = {
                 embed.setTitle("Interaction timed out!")
                 embed.setDescription('The response time for the command has expired')
                 embed.setFooter('Enter the command again please')
+                row.components[0].setDisabled(true);
+                row.components[1].setDisabled(true);
+                await interaction.editReply({ components: [row] });
                 await interaction.followUp({ embeds: [embed], ephemeral: true })
                 return;
             }
 
-            row.components[0].setDisabled(true);
-            row.components[1].setDisabled(true);
-            await response.update({ components: [row] });
 
             if (response.customId === 'yes') {
                 await mem.kick(res)

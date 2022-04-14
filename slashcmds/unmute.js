@@ -8,6 +8,7 @@ module.exports = {
 
         .addUserOption(option => option
             .setName('user')
+            .setRequired(true)
             .setDescription('The member to unmute.')),
 
     async execute(interaction) {
