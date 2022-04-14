@@ -67,24 +67,24 @@ module.exports = {
             embed.setTitle("Interaction timed out!")
             embed.setDescription("The response time for the command has expired")
             embed.setFooter("Enter the command again")
+            row.components[0].setDisabled(true);
+            row.components[1].setDisabled(true);
+            await interaction.editReply({ components: [row] });
             await interaction.followUp({ embeds: [embed], ephemeral: true })
         }
 
-        row.components[0].setDisabled(true);
-        row.components[1].setDisabled(true);
-        await response.update({ components: [row] });
 
         if (response.customId === "yes") {
             let id = interaction.guild.id
-            let found = await client.db.collection("settings").findOne({ guildid:id })
+            let found = await client.db.collection("settings").findOne({ guildid: id })
             if (!found) {
-                await client.db.collection("settings").insertOne({ guildid:id })
+                await client.db.collection("settings").insertOne({ guildid: id })
             }
             console.log(change)
             if (change === "enable") {
                 //update to enable here
-                await client.db.collection("settings").updateOne({guildid:id}, {$set:{enabled:true}})
-                
+                await client.db.collection("settings").updateOne({ guildid: id }, { $set: { enabled: true } })
+
                 embed.setColor("GREEN")
                 embed.setTitle("Setting updated!")
                 embed.setDescription("<:Success:949853804155793450> You will see confirmation messages when you run a moderator command.")
@@ -93,7 +93,7 @@ module.exports = {
                 await interaction.followUp({ embeds: [embed], ephemeral: true });
                 return;
             } else if (change === "disable") {
-                await client.db.collection("settings").updateOne({guildid:id}, {$set:{enabled:false}})
+                await client.db.collection("settings").updateOne({ guildid: id }, { $set: { enabled: false } })
 
                 //update to disable here
                 embed.setColor("GREEN")
