@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
-
+const chalk = require('chalk');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('unmute')
@@ -12,6 +12,7 @@ module.exports = {
             .setDescription('The member to unmute.')),
 
     async execute(interaction) {
+        console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` interactionCreate with command unmute`);
         const user = await interaction.options.getUser('user') || null
         const mem = await interaction.options.getMember('user') || null
         const embed = new MessageEmbed()

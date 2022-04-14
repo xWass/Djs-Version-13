@@ -1,10 +1,12 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require("discord.js")
+const chalk = require('chalk');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('serverinfo')
         .setDescription('Display info about this server.'),
     async execute(interaction) {
+        console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` interactionCreate with command serverinfo`);
 
         const owner = await interaction.guild.fetchOwner()
         const embed = new MessageEmbed()

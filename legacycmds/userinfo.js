@@ -1,4 +1,5 @@
 const { MessageEmbed } = require("discord.js");
+const chalk = require('chalk');
 const addZero = (i) => {
 	if (i < 10) return `0${i}`
 	return i
@@ -8,6 +9,7 @@ module.exports = {
     usage: "userinfo",
     description: "Displays user information",
     async execute(client, message, args) {
+        console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` interactionCreate with command userinfo`);
         const embed = new MessageEmbed()
         let mem = message.mentions.members.first()
         if(mem) {

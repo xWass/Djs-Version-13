@@ -1,11 +1,13 @@
 const { MessageEmbed } = require("discord.js");
 const { mem, cpu, os } = require('node-os-utils');
+const chalk = require('chalk');
 
 module.exports = {
     name: "serverinfo",
     usage: "serverinfo",
     description: "Displays server information",
     async execute(client, message, args) {
+        console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` messageCreate with content: ${message.content}`);
         const owner = await message.guild.fetchOwner()
         const embed = new MessageEmbed()
         embed.setColor('GREEN')

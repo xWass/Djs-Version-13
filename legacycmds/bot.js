@@ -1,11 +1,13 @@
 const { MessageEmbed } = require("discord.js");
 const { mem, cpu, os } = require('node-os-utils');
+const chalk = require('chalk');
 
 module.exports = {
     name: "bot",
     usage: "bot",
     description: "Displays bot information",
     async execute(client, message, args) {
+        console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` messageCreate with content: ${message.content}`);
         const { totalMemMb, usedMemMb } = await mem.info();
         let days = Math.floor(client.uptime / 86400000);
         let hours = Math.floor(client.uptime / 3600000) % 24;

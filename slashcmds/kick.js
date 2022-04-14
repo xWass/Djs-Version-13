@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
-
+const chalk = require('chalk');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('kick')
@@ -14,6 +14,7 @@ module.exports = {
             .setDescription('Reason for kicking this user.')),
 
     async execute(interaction, client) {
+        console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` interactionCreate with command kick`);
         let id = interaction.guild.id
         const settings = await client.db.collection("settings").findOne({ guildid: id })
 

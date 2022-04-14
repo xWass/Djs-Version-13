@@ -1,11 +1,12 @@
-// ⚙️
 const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
+const chalk = require('chalk');
 
 module.exports = {
     name: "help",
     usage: "help",
     description: "Displays help message",
     async execute(client, message, args) {
+        console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` interactionCreate with command help`);
 
         const embed = new MessageEmbed()
         const altEmbed = new MessageEmbed()

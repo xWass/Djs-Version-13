@@ -1,13 +1,15 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const { mem, cpu, os } = require('node-os-utils');
-
+const chalk = require('chalk');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('bot')
         .setDescription('View bot information'),
 
     async execute(interaction) {
+        console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` interactionCreate with command bot`);
+
         const { totalMemMb, usedMemMb } = await mem.info();
         let days = Math.floor(interaction.client.uptime / 86400000);
         let hours = Math.floor(interaction.client.uptime / 3600000) % 24;

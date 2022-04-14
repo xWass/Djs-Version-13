@@ -1,10 +1,11 @@
 const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
-const ms = require('ms')
+const chalk = require('chalk');
 module.exports = {
     name: "unmute",
     usage: "unmute",
     description: "Unmute a member.",
     async execute(client, message, args) {
+        console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` messageCreate with content: ${message.content}`);
         let mem = message.mentions.members.first()
         const embed = new MessageEmbed()
         if (!message.member.permissions.has('MODERATE_MEMBERS')) {

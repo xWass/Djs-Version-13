@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { MessageActionRow, MessageButton, MessageEmbed } = require("discord.js");
-
+const chalk = require("chalk");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("settings")
@@ -22,7 +22,8 @@ module.exports = {
         ),
 
     async execute(interaction, client) {
-        const set = interaction.options.getString("setting");
+        console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` interactionCreate with command ban`);
+
         const change = interaction.options.getString("modify");
 
 

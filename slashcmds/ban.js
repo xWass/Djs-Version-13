@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
+const chalk = require('chalk');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -10,11 +11,11 @@ module.exports = {
             .setRequired(true)
             .setDescription('The member to ban')),
     async execute(interaction, client) {
+        console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` interactionCreate with command ban`);
         let id = interaction.guild.id
         const settings = await client.db.collection("settings").findOne({ guildid: id })
         const user = interaction.options.getUser('user');
         const mem = interaction.options.getMember('user');
-
         const embed = new MessageEmbed()
         if (!interaction.member.permissions.has('BAN_MEMBERS')) {
             embed.setColor('DARK_RED')

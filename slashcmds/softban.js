@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
-
+const chalk = require('chalk');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('softban')
@@ -17,7 +17,7 @@ module.exports = {
             .setDescription('Invite the user back? (y/n)')),
 
     async execute(interaction, client) {
-
+        console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` interactionCreate with command softban`);
         const user = interaction.options.getUser('user');
         const mem = interaction.options.getMember('user');
         const inv = interaction.options.getString('invite');

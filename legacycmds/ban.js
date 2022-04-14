@@ -1,10 +1,12 @@
 const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
+const chalk = require('chalk');
 
 module.exports = {
     name: "ban",
     usage: "ban",
     description: "Ban a member.",
     async execute(client, message, args) {
+        console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` messageCreate with content: ${message.content}`);
         let mem = message.mentions.members.first()
         let id = message.guild.id
 

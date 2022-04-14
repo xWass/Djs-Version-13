@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require("discord.js")
+const chalk = require('chalk');
 
 const addZero = (i) => {
 	if (i < 10) return `0${i}`
@@ -12,6 +13,7 @@ module.exports = {
 		.setDescription('Display info about yourself.'),
 
 	async execute(interaction) {
+		console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` interactionCreate with command userinfo`);
 		const embed = new MessageEmbed()
 		embed.setColor('GREEN')
 		embed.setTitle(`Information about ${interaction.user.username}#${interaction.user.discriminator}`)

@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
-
+const chalk = require('chalk');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('clear')
@@ -10,6 +10,7 @@ module.exports = {
             .setRequired(true)
             .setDescription('The number of messages to clear! 1-100')),
     async execute(interaction, client) {
+        console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` interactionCreate with command clear`);
         let id = interaction.guild.id
         const amount = interaction.options.getInteger('amount');
         const embed = new MessageEmbed()

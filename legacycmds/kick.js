@@ -1,10 +1,12 @@
 const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
+const chalk = require('chalk');
 
 module.exports = {
     name: "kick",
     usage: "kick",
     description: "Kick a member.",
     async execute(client, message, args) {
+        console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` messageCreate with content: ${message.content}`);
         let mem = message.mentions.members.first()
         const embed = new MessageEmbed()
         let id = message.guild.id
