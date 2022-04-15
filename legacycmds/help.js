@@ -43,10 +43,8 @@ module.exports = {
                 altEmbed.setDescription(`Error: \n\`\`\`${err.toString()}\`\`\``)
                 altEmbed.setFooter('Thanks for using me!')
                 altEmbed.setColor('RED')
-
                 message.channel.send({ embeds: [altEmbed] })
                 return;
-
             });
         const interaction_ = await dm.channel
             .awaitMessageComponent({
@@ -55,7 +53,12 @@ module.exports = {
             })
             .catch(() => null);
 
-        if (interaction_ === null) return;
+        if (interaction_ === null) {
+            row.components[0].setDisabled(true);
+            row.components[1].setDisabled(true);
+            dm.edit({ components: [row] })
+            return;
+        }
 
         for (const component_ of row.components)
             if (!component_.disabled)
