@@ -4,8 +4,6 @@ const { MessageEmbed } = require("discord.js")
 module.exports = {
     name: "eval",
     description: "Evaluate some smexy code from xWass",
-    aliases: ["e"],
-    usage: `eval <code>`,
     async execute(client, message, args) {
 
         if (message.author.id !== "431487139298017282") return
