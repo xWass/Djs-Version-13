@@ -40,7 +40,6 @@ module.exports = {
 OS: ${await os.oos()}
 CPU: ${cpu.model()}
 Cores: ${cpu.count()}
-CPU Usage: ${await cpu.usage()} %
 RAM: ${totalMemMb} MB
 RAM Usage: ${usedMemMb} MB
 \`\`\`
