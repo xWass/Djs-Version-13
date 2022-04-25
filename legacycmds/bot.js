@@ -15,7 +15,10 @@ module.exports = {
         let seconds = Math.floor(client.uptime / 1000) % 60;
         let guildsCount = 0
         let usersCount = 0
-
+        if (!message.guild.me.hasPermission('EMBED_LINKS')) {
+            message.reply("I do not have the `EMBED_LINKS` permission!")
+            return;
+        }
         message.client.guilds.cache.forEach(g => {
             guildsCount++
             usersCount += g.memberCount
