@@ -26,6 +26,12 @@ module.exports = {
             return;
         }
 
+        if (!mem) {
+            embed.setColor('DARK_RED')
+            embed.setDescription('<:Error:949853701504372778> You must mention a member!')
+            await message.reply({ embeds: [embed], ephemeral: true })
+            return;
+        }
         if (!mem.moderatable) {
             embed.setColor('DARK_RED')
             embed.setTitle('Missing permission!')
