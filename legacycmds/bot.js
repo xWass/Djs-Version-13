@@ -19,7 +19,6 @@ module.exports = {
             message.reply("I do not have the `EMBED_LINKS` permission!")
             return;
         }
-        // a
         message.client.guilds.cache.forEach(g => {
             guildsCount++
             usersCount += g.memberCount
