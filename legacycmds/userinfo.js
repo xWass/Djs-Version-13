@@ -14,7 +14,6 @@ module.exports = {
             message.reply("This channel does not have the `EMBED_LINKS` permission enabled! This restricts me from sending embeds and completing my task.")
             return;
         }
-        // weird
         const embed = new MessageEmbed()
         let mem = message.mentions.members.first()
         if(mem) {
