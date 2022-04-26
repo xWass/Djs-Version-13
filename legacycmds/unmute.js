@@ -6,6 +6,10 @@ module.exports = {
     description: "Unmute a member.",
     async execute(client, message, args) {
         console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` messageCreate with content: ${message.content}`);
+        if (!message.channel.permissionsFor(message.guild.me).has('EMBED_LINKS')) {
+            message.reply("This channel does not have the `EMBED_LINKS` permission enabled! This restricts me from sending embeds and completing my task.")
+            return;
+        }
         let mem = message.mentions.members.first()
         const embed = new MessageEmbed()
         if (!message.member.permissions.has('MODERATE_MEMBERS')) {

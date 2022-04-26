@@ -15,7 +15,12 @@ module.exports = {
         let seconds = Math.floor(client.uptime / 1000) % 60;
         let guildsCount = 0
         let usersCount = 0
-        console.log(message.channel.permissionsFor(message.guild.me)
+
+        if (!message.channel.permissionsFor(message.guild.me).has('EMBED_LINKS')) {
+            message.reply("This channel does not have the `EMBED_LINKS` permission enabled! This restricts me from sending embeds and completing my task.")
+            return;
+        }
+
         if (!message.guild.me.permissions.has('ATTACH_FILES')) {
             message.reply("I do not have the `EMBED_LINKS` permission!")
             return;

@@ -10,6 +10,10 @@ module.exports = {
     description: "Displays user information",
     async execute(client, message, args) {
         console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` interactionCreate with command userinfo`);
+        if (!message.channel.permissionsFor(message.guild.me).has('EMBED_LINKS')) {
+            message.reply("This channel does not have the `EMBED_LINKS` permission enabled! This restricts me from sending embeds and completing my task.")
+            return;
+        }
         const embed = new MessageEmbed()
         let mem = message.mentions.members.first()
         if(mem) {

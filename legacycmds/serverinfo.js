@@ -8,6 +8,10 @@ module.exports = {
     description: "Displays server information",
     async execute(client, message, args) {
         console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` messageCreate with content: ${message.content}`);
+        if (!message.channel.permissionsFor(message.guild.me).has('EMBED_LINKS')) {
+            message.reply("This channel does not have the `EMBED_LINKS` permission enabled! This restricts me from sending embeds and completing my task.")
+            return;
+        }
         const owner = await message.guild.fetchOwner()
         const embed = new MessageEmbed()
         embed.setColor('GREEN')
