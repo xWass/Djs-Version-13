@@ -13,7 +13,7 @@ module.exports = {
         if (!message.channel.permissionsFor(message.guild.me).has('EMBED_LINKS')) {
             message.reply("This channel does not have the `EMBED_LINKS` permission enabled! This restricts me from sending embeds and completing my task.")
             return;
-        } // sigh
+        } 
         const embed = new MessageEmbed()
         let mem = message.mentions.members.first()
         if(mem) {
