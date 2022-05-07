@@ -7,10 +7,7 @@ module.exports = {
     description: "Mute a member.",
     async execute(client, message, args) {
         console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` messageCreate with content: ${message.content}`);
-        if (!message.channel.permissionsFor(message.guild.me).has('EMBED_LINKS')) {
-            message.reply("This channel does not have the `EMBED_LINKS` permission enabled! This restricts me from sending embeds and completing my task.")
-            return;
-        }
+
         let mem = message.mentions.members.first()
         const embed = new MessageEmbed()
         let id = message.guild.id
@@ -115,7 +112,7 @@ module.exports = {
                 await mem.timeout(tt)
 
                 embed.setColor('GREEN')
-                embed.setTitle('Member has been muted')
+                embed.setTitle('<:Success:949853804155793450> Member muted!')
                 embed.setDescription(`${mem.user.tag} has been muted.\nModerator: **${message.author.tag}**\nDuration: **${t}**`)
                 embed.setFooter(`ID: ${mem.id}`)
 
@@ -123,7 +120,6 @@ module.exports = {
             } else {
                 embed.setTitle('Cancelled!')
                 embed.setDescription('<:Success:949853804155793450> The command was successfully cancelled')
-                embed.setFooter('You can use another command')
 
                 await message.reply({ embeds: [embed], ephemeral: true });
             }
@@ -131,7 +127,7 @@ module.exports = {
             await mem.timeout(tt)
 
             embed.setColor('GREEN')
-            embed.setTitle('Member has been muted')
+            embed.setTitle('<:Success:949853804155793450> Member muted!')
             embed.setDescription(`${mem.user.tag} has been muted.\nModerator: **${message.author.tag}**\nDuration: **${t}**`)
             embed.setFooter(`ID: ${mem.id}`)
 

@@ -38,10 +38,15 @@ module.exports = {
             await interaction.reply({ embeds: [embed], ephemeral: true })
             return;
         }
+        if(message.member.roles.highest.comparePositionTo(message.mentions.members.first().roles.highest) < 0){
+            embed.setColor('DARK_RED')
+            embed.setDescription('<:Error:949853701504372778> This user has a higher role than you!')
+            await message.reply({ embeds: [embed], ephemeral: true })
+            return;
+        }
 
         if (!mem.bannable) {
             embed.setColor('DARK_RED')
-            embed.setTitle('Missing permission!')
             embed.setDescription(`<:Error:949853701504372778> I can not softban <@${user.id}> **[ ${user.id} ]**\nCheck bot permissions please!`)
             await interaction.reply({ embeds: [embed], ephemeral: true })
             return;
@@ -80,9 +85,7 @@ module.exports = {
 
             if (response === null) {
                 embed.setColor('DARK_RED')
-                embed.setTitle('Interaction timed out!')
-                embed.setDescription('The response time for the command has expired')
-                embed.setFooter('Enter the command again please')
+                embed.setDescription('<:Error:949853701504372778> The response time for the command has expired')
                 row.components[0].setDisabled(true);
                 row.components[1].setDisabled(true);
                 await interaction.editReply({ components: [row] });
@@ -108,16 +111,14 @@ module.exports = {
 
                     await interaction.guild.bans.remove(user.id)
                     embed.setColor('GREEN')
-                    embed.setTitle('Member has been softbanned')
+                    embed.setTitle('<:Success:949853804155793450> Member softbanned!')
                     embed.setDescription(`**${user.tag}** has been softbanned.\nModerator: **${interaction.user.tag}**\nThis user was invited back!`)
-                    embed.setFooter('Thanks for using me!')
                     await interaction.followUp({ embeds: [embed], ephemeral: false });
                     return;
                 } else {
                     embed.setColor('GREEN')
-                    embed.setTitle('Member has been softbanned')
+                    embed.setTitle('<:Success:949853804155793450> Member softbanned!')
                     embed.setDescription(`**${user.tag}** has been softbanned.\nModerator: **${interaction.user.tag}**\nThis user was not invited back!`)
-                    embed.setFooter('Thanks for using me!')
                     await interaction.guild.members.ban(user.id, {
                         days: 7
                     })
@@ -127,10 +128,8 @@ module.exports = {
                     return;
                 }
             } else
-                embed.setColor('GREEN')
-            embed.setTitle('Cancelled!')
+            embed.setColor('GREEN')
             embed.setDescription('<:Success:949853804155793450> The command was successfully cancelled')
-            embed.setFooter('You can use another command')
             await interaction.followUp({ embeds: [embed], ephemeral: true });
         } else {
             if (inv === "y") {
@@ -149,16 +148,14 @@ module.exports = {
 
                 await interaction.guild.bans.remove(user.id)
                 embed.setColor('GREEN')
-                embed.setTitle('Member has been softbanned')
+                embed.setTitle('<:Success:949853804155793450> Member softbanned!')
                 embed.setDescription(`**${user.tag}** has been softbanned.\nModerator: **${interaction.user.tag}**\nThis user was invited back!`)
-                embed.setFooter('Thanks for using me!')
                 await interaction.reply({ embeds: [embed], ephemeral: false });
                 return;
             } else {
                 embed.setColor('GREEN')
-                embed.setTitle('Member has been softbanned')
+                embed.setTitle('<:Success:949853804155793450> Member softbanned!')
                 embed.setDescription(`**${user.tag}** has been softbanned.\nModerator: **${interaction.user.tag}**\nThis user was not invited back!`)
-                embed.setFooter('Thanks for using me!')
                 await interaction.guild.members.ban(user.id, {
                     days: 7
                 })

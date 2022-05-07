@@ -16,15 +16,6 @@ module.exports = {
         let guildsCount = 0
         let usersCount = 0
 
-        if (!message.channel.permissionsFor(message.guild.me).has('EMBED_LINKS')) {
-            message.reply("This channel does not have the `EMBED_LINKS` permission enabled! This restricts me from sending embeds and completing my task.")
-            return;
-        }
-
-        if (!message.guild.me.permissions.has('ATTACH_FILES')) {
-            message.reply("I do not have the `EMBED_LINKS` permission!")
-            return;
-        }
         message.client.guilds.cache.forEach(g => {
             guildsCount++
             usersCount += g.memberCount

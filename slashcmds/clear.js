@@ -70,9 +70,7 @@ module.exports = {
 
             if (response === null) {
                 embed.setColor('DARK_RED')
-                embed.setTitle("Interaction timed out!")
-                embed.setDescription('The response time for the command has expired')
-                embed.setFooter('Enter the command again please')
+                embed.setDescription('<:Error:949853701504372778> The response time for the command has expired')
                 row.components[0].setDisabled(true);
                 row.components[1].setDisabled(true);
                 await interaction.editReply({ components: [row] });
@@ -82,25 +80,21 @@ module.exports = {
 
             if (response.customId === 'yes') {
                 embed.setColor('GREEN')
-                embed.setTitle('I successfully deleted the messages')
+                embed.setTitle('<:Success:949853804155793450> Messages deleted!')
                 embed.setDescription(`Amount: **${amount}**\nModerator: **${interaction.user.tag}**`)
-                embed.setFooter('Thanks for using me!')
                 await interaction.channel.bulkDelete(amount);
 
                 await interaction.followUp({ embeds: [embed], ephemeral: false });
             } else {
                 embed.setColor('DARK_RED')
-                embed.setTitle("Interaction cancelled!")
                 embed.setDescription('<:Success:949853804155793450> The command was successfully cancelled')
-                embed.setFooter('You can use another command')
 
                 await interaction.followUp({ embeds: [embed], ephemeral: true });
             }
         } else {
             embed.setColor('GREEN')
-            embed.setTitle('I successfully deleted the messages')
+            embed.setTitle('<:Success:949853804155793450> Messages deleted!')
             embed.setDescription(`Amount: **${amount}**\nModerator: **${interaction.user.tag}**`)
-            embed.setFooter('Thanks for using me!')
             await interaction.channel.bulkDelete(amount);
 
             await interaction.reply({ embeds: [embed], ephemeral: false });

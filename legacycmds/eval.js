@@ -7,10 +7,7 @@ module.exports = {
     async execute(client, message, args) {
 
         if (message.author.id !== "971185270261157888") return
-        if (!message.channel.permissionsFor(message.guild.me).has('EMBED_LINKS')) {
-            message.reply("This channel does not have the `EMBED_LINKS` permission enabled! This restricts me from sending embeds and completing my task.")
-            return;
-        }
+
         const pre_clean = async (code) => {
             let edit = code.replaceAll("```js", "")
             edit = edit.replaceAll("```", "")

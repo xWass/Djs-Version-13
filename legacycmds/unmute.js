@@ -6,10 +6,6 @@ module.exports = {
     description: "Unmute a member.",
     async execute(client, message, args) {
         console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` messageCreate with content: ${message.content}`);
-        if (!message.channel.permissionsFor(message.guild.me).has('EMBED_LINKS')) {
-            message.reply("This channel does not have the `EMBED_LINKS` permission enabled! This restricts me from sending embeds and completing my task.")
-            return;
-        }
         let mem = message.mentions.members.first()
         const embed = new MessageEmbed()
         if (!message.member.permissions.has('MODERATE_MEMBERS')) {
@@ -25,6 +21,7 @@ module.exports = {
             await message.reply({ embeds: [embed], ephemeral: true })
             return;
         }
+
         if (!mem) {
             embed.setColor('DARK_RED')
             embed.setDescription('<:Error:949853701504372778> You must mention a member!')
@@ -43,7 +40,7 @@ module.exports = {
             await mem.timeout(null)
 
             embed.setColor('GREEN')
-            embed.setTitle('Member has been unmuted')
+            embed.setTitle('<:Success:949853804155793450> Member unmuted!')
             embed.setDescription(`${mem.user.tag} has been unmuted.\nModerator: **${message.author.tag}**`)
             embed.setFooter(`ID: ${mem.id}`)
             await message.reply({ embeds: [embed], ephemeral: false, })

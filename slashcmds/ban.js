@@ -30,10 +30,15 @@ module.exports = {
             await interaction.reply({ embeds: [embed], ephemeral: true })
             return;
         }
+        if(message.member.roles.highest.comparePositionTo(message.mentions.members.first().roles.highest) < 0){
+            embed.setColor('DARK_RED')
+            embed.setDescription('<:Error:949853701504372778> This user has a higher role than you!')
+            await message.reply({ embeds: [embed], ephemeral: true })
+            return;
+        }
 
         if (!mem.bannable) {
             embed.setColor('DARK_RED')
-            embed.setTitle('Missing permission!')
             embed.setDescription(`<:Error:949853701504372778> I can not ban <@${user.id}> **[ ${user.id} ]**\nCheck bot permissions please!`)
             await interaction.reply({ embeds: [embed], ephemeral: true, })
             return;
@@ -42,7 +47,7 @@ module.exports = {
             let user = interaction.options.getUser('user');
             let mem = interaction.options.getMember('user');
             embed.setColor('DARK_RED')
-            embed.setTitle(`Ban a member?`)
+            embed.setTitle(`Ban this member?`)
             embed.setDescription(`Are you sure you want to ban <@${user.id}>?`)
             embed.setFooter(`ID: ${user.id}`)
 
@@ -72,9 +77,7 @@ module.exports = {
 
             if (response === null) {
                 embed.setColor('DARK_RED')
-                embed.setTitle('Interaction timed out!')
-                embed.setDescription('The response time for the command has expired')
-                embed.setFooter('Enter the command again please')
+                embed.setDescription('<:Error:949853701504372778> The response time for the command has expired')
                 row.components[0].setDisabled(true);
                 row.components[1].setDisabled(true);
                 await interaction.editReply({ components: [row] });
@@ -87,19 +90,17 @@ module.exports = {
             if (response.customId === 'yes') {
                 await interaction.guild.members.ban(user.id)
                 embed.setColor('GREEN')
-                embed.setTitle('Member has been banned')
+                embed.setTitle('<:Success:949853804155793450> Member banned!')
                 embed.setDescription(`<:Success:949853804155793450> **${user.tag}** has been banned.\nModerator: **${interaction.user.tag}**`)
                 await interaction.followUp({ embeds: [embed], ephemeral: false });
             } else {
-                embed.setTitle('Cancelled!')
                 embed.setDescription('<:Success:949853804155793450> The command was successfully cancelled')
-                embed.setFooter('You can use another command')
                 await interaction.followUp({ embeds: [embed], ephemeral: true });
             }
         } else {
             await interaction.guild.members.ban(user.id)
             embed.setColor('GREEN')
-            embed.setTitle('Member has been banned')
+            embed.setTitle('<:Success:949853804155793450> Member banned!')
             embed.setDescription(`<:Success:949853804155793450> **${user.tag}** has been banned.\nModerator: **${interaction.user.tag}**`)
             await interaction.reply({ embeds: [embed], ephemeral: false });
 

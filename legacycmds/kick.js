@@ -7,10 +7,7 @@ module.exports = {
     description: "Kick a member.",
     async execute(client, message, args) {
         console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` messageCreate with content: ${message.content}`);
-        if (!message.channel.permissionsFor(message.guild.me).has('EMBED_LINKS')) {
-            message.reply("This channel does not have the `EMBED_LINKS` permission enabled! This restricts me from sending embeds and completing my task.")
-            return;
-        }
+
         let mem = message.mentions.members.first()
         const embed = new MessageEmbed()
         let id = message.guild.id
@@ -37,9 +34,15 @@ module.exports = {
             return;
         }
 
+        if (message.member.roles.highest.comparePositionTo(message.mentions.members.first().roles.highest) < 0){
+            embed.setColor('DARK_RED')
+            embed.setDescription('<:Error:949853701504372778> This user has a higher role than you!')
+            await message.reply({ embeds: [embed], ephemeral: true })
+            return;
+        }
+
         if (!mem.kickable) {
             embed.setColor('DARK_RED')
-            embed.setTitle('Missing permission!')
             embed.setDescription(`<:Error:949853701504372778> I can not kick <@${mem.id}> **[ ${mem.id} ]**\nThis user most likely has a higher role than me or is the owner.`)
             await message.reply({ embeds: [embed], ephemeral: true, })
             return;
@@ -82,9 +85,7 @@ module.exports = {
 
             if (response === null) {
                 embed.setColor('DARK_RED')
-                embed.setTitle('Interaction timed out!')
-                embed.setDescription('The response time for the command has expired')
-                embed.setFooter('Enter the command again please')
+                embed.setDescription('<:Error:949853701504372778> The response time for the command has expired')
                 row.components[0].setDisabled(true);
                 row.components[1].setDisabled(true);
                 sent.edit({ components: [row] })
@@ -97,23 +98,20 @@ module.exports = {
                 await message.guild.members.kick(mem.id)
 
                 embed.setColor('GREEN')
-                embed.setTitle('Member has been kicked')
+                embed.setTitle('<:Success:949853804155793450> Member kicked!')
                 embed.setDescription(`<:Success:949853804155793450> **${mem.user.tag}** has been kicked.\nModerator: **${message.author.tag}**`)
                 embed.setFooter(`ID: ${mem.id}`)
 
                 await message.reply({ embeds: [embed], ephemeral: false });
             } else {
-                embed.setTitle('Cancelled!')
                 embed.setDescription('<:Success:949853804155793450> The command was successfully cancelled')
-                embed.setFooter('You can use another command')
-
                 await message.reply({ embeds: [embed], ephemeral: true });
             }
         } else {
             await message.guild.members.kick(mem.id)
 
             embed.setColor('GREEN')
-            embed.setTitle('Member has been kicked')
+            embed.setTitle('<:Success:949853804155793450> Member kicked!')
             embed.setDescription(`<:Success:949853804155793450> **${mem.user.tag}** has been kicked.\nModerator: **${message.author.tag}**`)
             embed.setFooter(`ID: ${mem.id}`)
 

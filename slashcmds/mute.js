@@ -45,21 +45,20 @@ module.exports = {
             await interaction.reply({ embeds: [embed], ephemeral: true })
             return;
         }
+        if(message.member.roles.highest.comparePositionTo(message.mentions.members.first().roles.highest) < 0){
+            embed.setColor('DARK_RED')
+            embed.setDescription('<:Error:949853701504372778> This user has a higher role than you!')
+            await message.reply({ embeds: [embed], ephemeral: true })
+            return;
+        }
 
         if (!mem.moderatable) {
             embed.setColor('DARK_RED')
-            embed.setTitle('Missing permission!')
             embed.setDescription(`<:Error:949853701504372778> I can not mute <@${user.id}> **[ ${user.id} ]**\nCheck bot permissions please!`)
             await interaction.reply({ embeds: [embed], ephemeral: true })
             return;
         }
 
-        if (t === null) {
-            embed.setColor('DARK_RED')
-            embed.setDescription('<:Error:949853701504372778> You failed to provide a mute duration!')
-            await interaction.reply({ embeds: [embed], ephemeral: true })
-            return;
-        }
 
         embed.setColor('GREEN')
         embed.setTitle(`Mute a member?`)
@@ -94,8 +93,7 @@ module.exports = {
 
             if (response === null) {
                 embed.setColor('DARK_RED')
-                embed.setTitle('Interaction timed out!')
-                embed.setDescription('The response time for the command has expired')
+                embed.setDescription('<:Error:949853701504372778> The response time for the command has expired')
                 embed.setFooter('Enter the command again please')
                 row.components[0].setDisabled(true);
                 row.components[1].setDisabled(true);
@@ -107,7 +105,7 @@ module.exports = {
 
             if (response.customId === 'yes') {
                 embed.setColor('GREEN')
-                embed.setTitle('Member has been muted')
+                embed.setTitle('<:Success:949853804155793450> Member muted!')
                 embed.setDescription(`<@${user.id}> has been muted.\nModerator: **${interaction.user.tag}**\nDuration: **${t}**\nReason: **${res}**`)
                 embed.setFooter('Thanks for using me!')
                 await mem.timeout(tt, res)
@@ -122,7 +120,7 @@ module.exports = {
             }
         } else {
             embed.setColor('GREEN')
-            embed.setTitle('Member has been muted')
+            embed.setTitle('<:Success:949853804155793450> Member muted!')
             embed.setDescription(`<@${user.id}> has been muted.\nModerator: **${interaction.user.tag}**\nDuration: **${t}**\nReason: **${res}**`)
             embed.setFooter('Thanks for using me!')
             await mem.timeout(tt, res)

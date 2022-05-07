@@ -13,10 +13,7 @@ module.exports = {
         const amount = args[0]
         const settings = await client.db.collection("settings").findOne({ guildid: id })
         
-        if (!message.channel.permissionsFor(message.guild.me).has('EMBED_LINKS')) {
-            message.reply("This channel does not have the `EMBED_LINKS` permission enabled! This restricts me from sending embeds and completing my task.")
-            return;
-        }
+
         if (!message.member.permissions.has('MANAGE_MESSAGES')) {
             embed.setColor('DARK_RED')
             embed.setDescription('<:Error:949853701504372778> You do not have the `MANAGE_MESSAGES` permission!')
@@ -77,9 +74,7 @@ module.exports = {
 
             if (response === null) {
                 embed.setColor('DARK_RED')
-                embed.setTitle("Command timed out!")
-                embed.setDescription('The response time for the command has expired')
-                embed.setFooter('Enter the command again please')
+                embed.setDescription('<:Error:949853701504372778> The response time for the command has expired')
                 row.components[0].setDisabled(true);
                 row.components[1].setDisabled(true);
                 sent.edit({ components: [row] })
@@ -92,7 +87,7 @@ module.exports = {
 
             if (response.customId === 'yes') {
                 embed.setColor('GREEN')
-                embed.setTitle('I successfully deleted the messages')
+                embed.setTitle('<:Success:949853804155793450> Messages deleted!')
                 embed.setDescription(`Amount: **${amount}**\nModerator: **${message.author.tag}**`)
                 embed.setFooter('Thanks for using me!')
                 await message.delete()
@@ -110,7 +105,7 @@ module.exports = {
             }
         } else {
             embed.setColor('GREEN')
-            embed.setTitle('I successfully deleted the messages')
+            embed.setTitle('<:Success:949853804155793450> Messages deleted!')
             embed.setDescription(`Amount: **${amount}**\nModerator: **${message.author.tag}**`)
             embed.setFooter('Thanks for using me!')
             await message.delete()
