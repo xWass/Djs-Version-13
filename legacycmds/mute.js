@@ -38,14 +38,12 @@ module.exports = {
         }
         if (!mem.moderatable) {
             embed.setColor('DARK_RED')
-            embed.setTitle('Missing permission!')
             embed.setDescription(`<:Error:949853701504372778> I can not mute <@${mem.id}> **[ ${mem.id} ]**\nThis user most likely has a higher role than me or is the owner.`)
             await message.reply({ embeds: [embed], ephemeral: true, })
             return;
         }
         if(message.member.roles.highest.comparePositionTo(message.mentions.members.first().roles.highest) < 0){
             embed.setColor('DARK_RED')
-            embed.setTitle('Missing permissions!')
             embed.setDescription('<:Error:949853701504372778> This user has a higher role than you!')
             await message.reply({ embeds: [embed], ephemeral: true })
             return;
@@ -53,7 +51,6 @@ module.exports = {
         
         if (args[1] === undefined) {
             embed.setColor('DARK_RED')
-            embed.setTitle('No Duration!')
             embed.setDescription(`<:Error:949853701504372778> You failed to provide a mute duration! \nFormat: \`\`\`1min, 1h, 1d\`\`\``)
             await message.reply({ embeds: [embed], ephemeral: true, })
             return;
@@ -63,7 +60,6 @@ module.exports = {
 
         if (isNaN(tt)) {
             embed.setColor('DARK_RED')
-            embed.setTitle('Duration formatted incorrectly!')
             embed.setDescription(`<:Error:949853701504372778> You provided a duration in the incorrect format! \nFormat: \`\`\`1min, 1h, 1d\`\`\``)
             await message.reply({ embeds: [embed], ephemeral: true, })
             return;
@@ -106,9 +102,7 @@ module.exports = {
 
             if (response === null) {
                 embed.setColor('DARK_RED')
-                embed.setTitle('Interaction timed out!')
-                embed.setDescription('The response time for the command has expired')
-                embed.setFooter('Enter the command again please')
+                embed.setDescription('<:Error:949853701504372778> The response time for the command has expired')
                 row.components[0].setDisabled(true);
                 row.components[1].setDisabled(true);
                 sent.edit({ components: [row] })
