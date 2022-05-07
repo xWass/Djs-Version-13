@@ -34,7 +34,6 @@ module.exports = {
             );
         altEmbed.setTitle('You recieved mail!')
         altEmbed.setColor('GREEN')
-        await message.reply({ embeds: [altEmbed] })
         const dm = await message.member
             .send({ embeds: [embed], components: [row] })
             .catch((err) => {
@@ -44,7 +43,8 @@ module.exports = {
                 message.channel.send({ embeds: [altEmbed] })
                 return;
             });
-             
+        await message.reply({ embeds: [altEmbed] })
+
         const interaction_ = await dm.channel
             .awaitMessageComponent({
                 filter: (i) => i.customId === 'yes',
