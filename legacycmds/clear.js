@@ -89,7 +89,6 @@ module.exports = {
                 embed.setColor('GREEN')
                 embed.setTitle('<:Success:949853804155793450> Messages deleted!')
                 embed.setDescription(`Amount: **${amount}**\nModerator: **${message.author.tag}**`)
-                embed.setFooter('Thanks for using me!')
                 await message.delete()
                 const tot = Number(args[0]) + 1
                 await message.channel.bulkDelete(tot);
@@ -97,9 +96,7 @@ module.exports = {
                 await message.channel.send({ embeds: [embed] });
             } else {
                 embed.setColor('DARK_RED')
-                embed.setTitle("Interaction cancelled!")
                 embed.setDescription('<:Success:949853804155793450> The command was successfully cancelled')
-                embed.setFooter('You can use another command')
 
                 await message.reply({ embeds: [embed] });
             }
@@ -107,7 +104,6 @@ module.exports = {
             embed.setColor('GREEN')
             embed.setTitle('<:Success:949853804155793450> Messages deleted!')
             embed.setDescription(`Amount: **${amount}**\nModerator: **${message.author.tag}**`)
-            embed.setFooter('Thanks for using me!')
             await message.delete()
             const tot = Number(args[0])
             await message.channel.bulkDelete(tot);

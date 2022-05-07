@@ -99,7 +99,7 @@ module.exports = {
 
                 embed.setColor('GREEN')
                 embed.setTitle('<:Success:949853804155793450> Member kicked!')
-                embed.setDescription(`<:Success:949853804155793450> **${mem.user.tag}** has been kicked.\nModerator: **${message.author.tag}**`)
+                embed.setDescription(`**${mem.user.tag}** has been kicked.\nModerator: **${message.author.tag}**`)
                 embed.setFooter(`ID: ${mem.id}`)
 
                 await message.reply({ embeds: [embed], ephemeral: false });
@@ -112,7 +112,7 @@ module.exports = {
 
             embed.setColor('GREEN')
             embed.setTitle('<:Success:949853804155793450> Member kicked!')
-            embed.setDescription(`<:Success:949853804155793450> **${mem.user.tag}** has been kicked.\nModerator: **${message.author.tag}**`)
+            embed.setDescription(`**${mem.user.tag}** has been kicked.\nModerator: **${message.author.tag}**`)
             embed.setFooter(`ID: ${mem.id}`)
 
             await message.reply({ embeds: [embed], ephemeral: false });

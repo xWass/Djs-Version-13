@@ -94,7 +94,6 @@ module.exports = {
             if (response === null) {
                 embed.setColor('DARK_RED')
                 embed.setDescription('<:Error:949853701504372778> The response time for the command has expired')
-                embed.setFooter('Enter the command again please')
                 row.components[0].setDisabled(true);
                 row.components[1].setDisabled(true);
                 await interaction.editReply({ components: [row] });
@@ -107,7 +106,6 @@ module.exports = {
                 embed.setColor('GREEN')
                 embed.setTitle('<:Success:949853804155793450> Member muted!')
                 embed.setDescription(`<@${user.id}> has been muted.\nModerator: **${interaction.user.tag}**\nDuration: **${t}**\nReason: **${res}**`)
-                embed.setFooter('Thanks for using me!')
                 await mem.timeout(tt, res)
                 await interaction.followUp({ embeds: [embed] });
                 return;
@@ -122,7 +120,6 @@ module.exports = {
             embed.setColor('GREEN')
             embed.setTitle('<:Success:949853804155793450> Member muted!')
             embed.setDescription(`<@${user.id}> has been muted.\nModerator: **${interaction.user.tag}**\nDuration: **${t}**\nReason: **${res}**`)
-            embed.setFooter('Thanks for using me!')
             await mem.timeout(tt, res)
             await interaction.reply({ embeds: [embed] });
             return;

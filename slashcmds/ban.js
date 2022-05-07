@@ -91,7 +91,7 @@ module.exports = {
                 await interaction.guild.members.ban(user.id)
                 embed.setColor('GREEN')
                 embed.setTitle('<:Success:949853804155793450> Member banned!')
-                embed.setDescription(`<:Success:949853804155793450> **${user.tag}** has been banned.\nModerator: **${interaction.user.tag}**`)
+                embed.setDescription(`**${user.tag}** has been banned.\nModerator: **${interaction.user.tag}**`)
                 await interaction.followUp({ embeds: [embed], ephemeral: false });
             } else {
                 embed.setDescription('<:Success:949853804155793450> The command was successfully cancelled')
@@ -101,7 +101,7 @@ module.exports = {
             await interaction.guild.members.ban(user.id)
             embed.setColor('GREEN')
             embed.setTitle('<:Success:949853804155793450> Member banned!')
-            embed.setDescription(`<:Success:949853804155793450> **${user.tag}** has been banned.\nModerator: **${interaction.user.tag}**`)
+            embed.setDescription(`**${user.tag}** has been banned.\nModerator: **${interaction.user.tag}**`)
             await interaction.reply({ embeds: [embed], ephemeral: false });
 
         }

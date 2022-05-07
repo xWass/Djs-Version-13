@@ -97,7 +97,7 @@ module.exports = {
                 await mem.kick(res)
                 embed.setColor('GREEN')
                 embed.setTitle(`<:Success:949853804155793450> Member kicked!`)
-                embed.setDescription(`<:Success:949853804155793450> **${user.tag}** has been kicked.\nModerator: **${interaction.user.tag}**\nReason: **${res}**`)
+                embed.setDescription(`**${user.tag}** has been kicked.\nModerator: **${interaction.user.tag}**\nReason: **${res}**`)
                 await interaction.followUp({ embeds: [embed] });
                 return;
             } else {
@@ -109,7 +109,7 @@ module.exports = {
             await mem.kick(res)
             embed.setColor('GREEN')
             embed.setTitle(`<:Success:949853804155793450> Member kicked!`)
-            embed.setDescription(`<:Success:949853804155793450> **${user.tag}** has been kicked.\nModerator: **${interaction.user.tag}**\nReason: **${res}**`)
+            embed.setDescription(`**${user.tag}** has been kicked.\nModerator: **${interaction.user.tag}**\nReason: **${res}**`)
             await interaction.reply({ embeds: [embed] });
 
         }

@@ -95,7 +95,7 @@ module.exports = {
             if (response.customId === 'yes') {
                 embed.setColor('GREEN')
                 embed.setTitle('<:Success:949853804155793450> Member banned!')
-                embed.setDescription(`<:Success:949853804155793450> **${mem.user.tag}** has been banned.\nModerator: **${message.author.tag}**`)
+                embed.setDescription(`**${mem.user.tag}** has been banned.\nModerator: **${message.author.tag}**`)
                 embed.setFooter(`ID: ${mem.id}`)
 
                 await message.guild.members.ban(mem.id)
@@ -108,7 +108,7 @@ module.exports = {
         } else {
             embed.setColor('GREEN')
             embed.setTitle('<:Success:949853804155793450> Member banned!')
-            embed.setDescription(`<:Success:949853804155793450> **${mem.user.tag}** has been banned.\nModerator: **${message.author.tag}**`)
+            embed.setDescription(`**${mem.user.tag}** has been banned.\nModerator: **${message.author.tag}**`)
             embed.setFooter(`ID: ${mem.id}`)
 
             await message.guild.members.ban(mem.id)

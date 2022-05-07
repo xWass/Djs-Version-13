@@ -139,8 +139,8 @@ module.exports = {
                 })
 
                 embed.setColor('GREEN')
-                embed.setTitle('You were softbanned from a server')
-                embed.setDescription(`<:Success:949853804155793450> Heres an invite back:\n**${invite}**`)
+                embed.setTitle('You were softbanned from a server.')
+                embed.setDescription(`Heres an invite back:\n**${invite}**`)
                 await user.send({ embeds: [embed], ephemeral: false })
                 await interaction.guild.members.ban(user.id, {
                     days: 7
