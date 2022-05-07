@@ -1,6 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 const { mem, cpu, os } = require('node-os-utils');
 const chalk = require('chalk');
+const config = require('../config.json');
 
 module.exports = {
     name: "bot",
@@ -44,7 +45,7 @@ RAM: ${totalMemMb} MB
 RAM Usage: ${usedMemMb} MB
 \`\`\`
 `)
-            .setFooter('Bot version: v1.0.1.4')
+            .setFooter(`Diomedes v${config.version}`)
 
         await message.reply({ embeds: [embed] })
     }

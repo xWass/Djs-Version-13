@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const { mem, cpu, os } = require('node-os-utils');
 const chalk = require('chalk');
+const config = require('../config.json');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('bot')
@@ -47,7 +48,7 @@ RAM: ${totalMemMb} MB
 RAM Usage: ${usedMemMb} MB
 \`\`\`
 `)
-            .setFooter('Bot version: v1.0.1.4')
+            .setFooter(`Diomedes v${config.version}`)
 
         await interaction.reply({ embeds: [embed] })
     }
