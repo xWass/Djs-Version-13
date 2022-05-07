@@ -47,6 +47,7 @@ module.exports = {
             embed.setColor('DARK_RED')
             embed.setTitle('Missing permissions!')
             embed.setDescription('<:Error:949853701504372778> This user has a higher role than you!')
+            await message.reply({ embeds: [embed], ephemeral: true })
             return;
         }
         
