@@ -43,6 +43,13 @@ module.exports = {
             await message.reply({ embeds: [embed], ephemeral: true, })
             return;
         }
+        if(message.member.roles.highest.comparePositionTo(message.mentions.members.first().roles.highest) < 0){
+            embed.setColor('DARK_RED')
+            embed.setTitle('Missing permissions!')
+            embed.setDescription('<:Error:949853701504372778> This user has a higher role than you!')
+            return;
+        }
+        
         if (args[1] === undefined) {
             embed.setColor('DARK_RED')
             embed.setTitle('No Duration!')

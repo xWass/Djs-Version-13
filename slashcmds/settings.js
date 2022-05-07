@@ -10,6 +10,7 @@ module.exports = {
             .setName("setting")
             .setDescription("Select \"ModConfirm\" to disable confirmation messages on moderation actions.")
             .addChoice("ModConfirm", "confirms")
+            // .addChoice("Prefix", "prefix")
             .setRequired(true)
         )
 
@@ -20,7 +21,13 @@ module.exports = {
             .addChoice("Disable", "disable")
             .setRequired(true)
         ),
-
+/*
+coll is client.db.collection whatever 
+await coll.updateOne(
+    { guildid: interaction.guild.id },
+    { $set: { 'config.channelid': catt.id, 'config.webhookid': hook.id, 'config.webhooktoken': hook.token } } // or something similar
+);
+*/
     async execute(interaction, client) {
         console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` interactionCreate with command ban`);
 
