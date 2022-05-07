@@ -38,7 +38,7 @@ await coll.updateOne(
 
         if (!interaction.member.permissions.has("BAN_MEMBERS")) {
             embed.setColor("DARK_RED")
-            embed.setDescription("<:Error:949853701504372778> You do not have the `BAN_MEMBERS` permission!")
+            embed.setDescription("<:Error:949853701504372778> You are not an Administrator!")
             await interaction.reply({ embeds: [embed], ephemeral: true })
             return;
         }
@@ -74,9 +74,7 @@ await coll.updateOne(
             .catch(() => null);
         if (response === null) {
             embed.setColor("DARK_RED")
-            embed.setTitle("Interaction timed out!")
-            embed.setDescription("The response time for the command has expired")
-            embed.setFooter("Enter the command again")
+            embed.setDescription("<:Error:949853701504372778> The response time for the command has expired")
             row.components[0].setDisabled(true);
             row.components[1].setDisabled(true);
             await interaction.editReply({ components: [row] });
@@ -98,7 +96,6 @@ await coll.updateOne(
                 embed.setColor("GREEN")
                 embed.setTitle("Setting updated!")
                 embed.setDescription("<:Success:949853804155793450> You will see confirmation messages when you run a moderator command.")
-                embed.setFooter("You can use another command")
 
                 await interaction.followUp({ embeds: [embed], ephemeral: true });
                 return;
@@ -109,7 +106,6 @@ await coll.updateOne(
                 embed.setColor("GREEN")
                 embed.setTitle("Setting updated!")
                 embed.setDescription("<:Success:949853804155793450> You will no longer see confirmation messages when you run a moderator command.")
-                embed.setFooter("You can use another command")
 
                 await interaction.followUp({ embeds: [embed], ephemeral: true });
                 return;
@@ -118,7 +114,6 @@ await coll.updateOne(
             embed.setColor("GREEN")
             embed.setTitle("Cancelled!")
             embed.setDescription("<:Success:949853804155793450> The command was successfully cancelled")
-            embed.setFooter("You can use another command")
             await interaction.followUp({ embeds: [embed], ephemeral: true });
 
         }

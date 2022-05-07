@@ -24,7 +24,7 @@ module.exports = {
 
         if (!mem) {
             embed.setColor('DARK_RED')
-            embed.setDescription('<:Error:949853701504372778> You must mention a member!')
+            embed.setDescription('<:Error:949853701504372778> You failed to mention a member!')
             await message.reply({ embeds: [embed], ephemeral: true })
             return;
         }
