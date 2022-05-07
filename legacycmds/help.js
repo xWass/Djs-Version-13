@@ -24,7 +24,6 @@ module.exports = {
             { name: `Unmute`, value: `Unmutes a mentioned user. \nUsage: \`\`\`.unmute <@member>\`\`\``, inline: true },
             { name: `User Info`, value: `Dislays information about you or a mentioned user. \nUsage: \n\`\`\`.userinfo [@member]\`\`\``, inline: true }
         )
-        embed.setFooter('Thanks for using me!')
 
         const row = new MessageActionRow()
             .addComponents(
@@ -34,19 +33,18 @@ module.exports = {
                     .setStyle('SUCCESS')
             );
         altEmbed.setTitle('You recieved mail!')
-        altEmbed.setFooter('Thanks for using me!')
         altEmbed.setColor('GREEN')
         await message.reply({ embeds: [altEmbed] })
         const dm = await message.member
             .send({ embeds: [embed], components: [row] })
             .catch((err) => {
-                altEmbed.setTitle('Never mind! It appears your dms are closed.')
+                altEmbed.setTitle('<:Error:949853701504372778> It appears your dms are closed.')
                 altEmbed.setDescription(`Error: \n\`\`\`${err.toString()}\`\`\``)
-                altEmbed.setFooter('Thanks for using me!')
                 altEmbed.setColor('RED')
                 message.channel.send({ embeds: [altEmbed] })
                 return;
             });
+             
         const interaction_ = await dm.channel
             .awaitMessageComponent({
                 filter: (i) => i.customId === 'yes',
