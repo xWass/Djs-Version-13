@@ -6,7 +6,7 @@ module.exports = {
     description: "Evaluate some smexy code from xWass",
     async execute(client, message, args) {
 
-        if (message.author.id !== "971185270261157888") return
+        if (message.author.id !== "928624781731983380") return
 
         const pre_clean = async (code) => {
             let edit = code.replaceAll("```js", "")
