@@ -42,7 +42,7 @@ module.exports = {
 
         const filter = (interaction) => interaction.customId === 'suggest';
 
-        let mod = interaction.awaitModalSubmit({ filter, time: 150_000 })
+        let mod = await interaction.awaitModalSubmit({ filter, time: 150_000 })
             .then(async (modal) => {
                 const a = modal.fields.getTextInputValue('descrip')
                 const b = modal.fields.getTextInputValue('descrip2')
