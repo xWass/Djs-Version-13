@@ -24,7 +24,7 @@ module.exports = {
         const first = new MessageActionRow().addComponents(shortDescription);
         const second = new MessageActionRow().addComponents(longDescription);
 
-        modal.addComponents(first, second, third);
+        modal.addComponents(first, second);
 
         await interaction.showModal(modal);
         const filter = (interaction) => interaction.customId === 'suggestt';
