@@ -36,5 +36,6 @@ module.exports = {
                 const b = modal.fields.getTextInputValue('descrip2')
                 console.log(a, b)
             })
+        modal.reply("Your suggestion has been submitted!");
     }
 }
