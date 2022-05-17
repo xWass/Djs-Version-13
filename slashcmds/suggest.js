@@ -44,10 +44,12 @@ module.exports = {
 
         interaction.awaitModalSubmit({ filter, time: 150_000 })
             .then(async (modal) => {
+                const embed = new MessageEmbed()
                 const a = modal.fields.getTextInputValue('descrip')
                 const b = modal.fields.getTextInputValue('descrip2')
-                console.log(a, b)
+
                 modal.reply("Your suggestion has been submitted!");
+
                 let chan = client.channels.cache.get("948680525235777576");
                 chan.send(`${a} \n${b}`);
 
