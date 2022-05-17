@@ -60,8 +60,9 @@ module.exports = {
                 let chan = interaction.guild.channels.cache.get("948680525235777576");
 
                 // embed stuff
-                embed.setTitle("Suggestion")
-                embed.setDescription(`Brief Description: ${a}\nDetailed explanation: ${b}`)
+                embed.setTitle(`${a}`)
+                embed.setDescription(`Detailed explanation: ${b}`)
+                embed.setFooter(`Suggestion submitted by ${interaction.author.username}`)
                 embed.setColor("#00ff00")
                 chan.send({ embeds: [ embed ], ephemeral: true  });
 
