@@ -30,7 +30,7 @@ module.exports = {
             .setStyle('SHORT')
         const longDescription = new TextInputComponent()
             .setCustomId('descrip2')
-            .setLabel("Enter a longer description here.")
+            .setLabel("Enter a detailed explanation here.")
             .setStyle('PARAGRAPH');
 
         const first = new MessageActionRow().addComponents(shortDescription);
@@ -51,7 +51,12 @@ module.exports = {
                 modal.reply("Your suggestion has been submitted!");
 
                 let chan = interaction.guild.channels.cache.get("948680525235777576");
-                chan.send(`${a} \n${b}`);
+
+                // embed stuff
+                embed.setTitle("Suggestion")
+                embed.setDescription(`Brief Description: ${a}\nDetailed explanation: ${b}`)
+                embed.setColor("#00ff00")
+                chan.send({ embeds: [ embed ] });
 
             })
             .catch(err => {return err});
