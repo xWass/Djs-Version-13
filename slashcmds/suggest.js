@@ -40,7 +40,7 @@ module.exports = {
 
         await interaction.showModal(modal);
 
-        const filter = (interaction) => interaction.customId === 'suggest';
+        const filter = (interaction) => interaction.customId === customid;
 
         let mod = await interaction.awaitModalSubmit({ filter, time: 150_000 })
             .then(async (modal) => {
