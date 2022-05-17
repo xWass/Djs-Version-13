@@ -55,7 +55,7 @@ module.exports = {
                 const a = modal.fields.getTextInputValue('descrip')
                 const b = modal.fields.getTextInputValue('descrip2')
 
-                modal.reply("Your suggestion has been submitted!", ephemeral: true );
+                modal.reply({ content: "Your suggestion has been submitted!", ephemeral: true });
 
                 let chan = interaction.guild.channels.cache.get("948680525235777576");
 
