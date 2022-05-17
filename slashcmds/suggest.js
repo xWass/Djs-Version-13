@@ -18,6 +18,8 @@ module.exports = {
         .setDescription('Submit a suggestion'),
 
     async execute(interaction) {
+        console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` interactionCreate with command suggest`);
+
         const customid = generateCaptchaString();
         const modal = new Modal()
             .setCustomId(customid)
@@ -28,10 +30,15 @@ module.exports = {
             .setCustomId('descrip')
             .setLabel("Enter a brief description here.")
             .setStyle('SHORT')
+            .setPlaceholder('Keep this one short.')
+            .setRequired(true);
+
         const longDescription = new TextInputComponent()
             .setCustomId('descrip2')
             .setLabel("Enter a detailed explanation here.")
-            .setStyle('PARAGRAPH');
+            .setStyle('PARAGRAPH')
+            .setPlaceholder('Give me all the details')
+            .setRequired(true);
 
         const first = new MessageActionRow().addComponents(shortDescription);
         const second = new MessageActionRow().addComponents(longDescription);
@@ -56,7 +63,7 @@ module.exports = {
                 embed.setTitle("Suggestion")
                 embed.setDescription(`Brief Description: ${a}\nDetailed explanation: ${b}`)
                 embed.setColor("#00ff00")
-                chan.send({ embeds: [ embed ] });
+                chan.send({ embeds: [ embed ], ephemeral: true  });
 
             })
             .catch(err => {return err});
