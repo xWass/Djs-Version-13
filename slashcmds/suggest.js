@@ -42,12 +42,12 @@ module.exports = {
 
         const filter = (interaction) => interaction.customId === customid;
 
-        let mod = await interaction.awaitModalSubmit({ filter, time: 150_000 })
+        interaction.awaitModalSubmit({ filter, time: 150_000 })
             .then(async (modal) => {
                 const a = modal.fields.getTextInputValue('descrip')
                 const b = modal.fields.getTextInputValue('descrip2')
                 console.log(a, b)
+                modal.reply("Your suggestion has been submitted!");
             })
-        mod.reply("Your suggestion has been submitted!");
     }
 }
