@@ -14,7 +14,7 @@ module.exports = {
         // text input components
         const shortDescription = new TextInputComponent()
             .setCustomId('descrip')
-            .setLabel("Enter a brief description of your suggestion here.")
+            .setLabel("Enter a brief description here.")
             .setStyle('SHORT')
         const longDescription = new TextInputComponent()
             .setCustomId('descrip2')
