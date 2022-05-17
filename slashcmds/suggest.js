@@ -55,7 +55,7 @@ module.exports = {
                 const a = modal.fields.getTextInputValue('descrip')
                 const b = modal.fields.getTextInputValue('descrip2')
 
-                modal.reply("Your suggestion has been submitted!");
+                modal.reply("Your suggestion has been submitted!", ephemeral: true );
 
                 let chan = interaction.guild.channels.cache.get("948680525235777576");
 
@@ -64,7 +64,7 @@ module.exports = {
                 embed.setDescription(`Detailed explanation: ${b}`)
                 embed.setFooter(`Suggestion submitted by ${interaction.author.username}`)
                 embed.setColor("#00ff00")
-                chan.send({ embeds: [ embed ], ephemeral: true  });
+                chan.send({ embeds: [ embed ] });
 
             })
             .catch(err => {return err});
