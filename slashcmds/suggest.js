@@ -59,7 +59,6 @@ module.exports = {
 
                 let chan = interaction.guild.channels.cache.get("948680525235777576");
 
-                // embed stuff
                 embed.setTitle(`${a}`)
                 embed.setDescription(`Detailed explanation: ${b}`)
                 embed.setFooter({ text: `Suggestion submitted by ${interaction.author.username}`, iconURL: interaction.author.avatarURL() })
