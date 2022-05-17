@@ -43,6 +43,6 @@ module.exports = {
             embed.setTitle('<:Success:949853804155793450> Member unmuted!')
             embed.setDescription(`${mem.user.tag} has been unmuted.\nModerator: **${message.author.tag}**`)
             embed.setFooter(`ID: ${mem.id}`)
-            await message.reply({ embeds: [embed], ephemeral: false, })
+            await message.reply({ embeds: [embed], ephemeral: false })
     }
 }
