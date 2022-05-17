@@ -50,11 +50,11 @@ module.exports = {
 
                 modal.reply("Your suggestion has been submitted!");
 
-                let chan = interaction.guild.channels.cache.find("948680525235777576");
+                let chan = interaction.guild.channels.cache.get("948680525235777576");
                 chan.send(`${a} \n${b}`);
 
             })
             .catch(err => {return err});
-            // k
+
     }
 }
