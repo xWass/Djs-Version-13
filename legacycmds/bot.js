@@ -30,10 +30,10 @@ module.exports = {
                 { name: `Users :family_mmbb:`, value: `\`\`\`${usersCount}\`\`\``, inline: true },
                 { name: `Shard ID :newspaper:`, value: `\`\`\`1\`\`\``, inline: true },
                 { name: `API Latency :ping_pong:`, value: `\`\`\`${client.ws.ping}ms\`\`\``, inline: true },
-                { name: `Discord.js :tools:`, value: `\`\`\`13.4.0\`\`\``, inline: true },
+                { name: `Discord.js :tools:`, value: `\`\`\`13.7.0\`\`\``, inline: true },
                 { name: `CPU Usage :bar_chart:`, value: `\`\`\`${await cpu.usage()} %\`\`\``, inline: true },
-                { name: `Developers :pencil:`, value: `\`\`\`xWass#6841\`\`\``, inline: true },
-                { name: `Contributers :pencil2:`, value: `\`\`\`DEEM#0001\`\`\``, inline: true },
+                { name: `Developers :pencil:`, value: `\`\`\`xWass#5627\`\`\``, inline: true },
+                { name: `Contributers :pencil2:`, value: `\`\`\`big.bun#6969\`\`\``, inline: true },
                 { name: `Uptime :green_circle:`, value: `\`\`\`${days}d ${hours}h ${minutes}m ${seconds}s\`\`\``, inline: true }
             )
             .setDescription(`

@@ -11,7 +11,7 @@ module.exports = {
 
         let embed = new MessageEmbed()
             .setTitle("Contributers")
-            .setDescription("**These are people who have contributed to Diomedes code:** \nDEEM#0001 (ID:887395123145609218)")
+            .setDescription("**These are people who have contributed to Diomedes code:** \nbig.bun#6969 (ID: 471409054594498561) \n")
             .setFooter("Say thanks to the contributers :)")
 
         await message.reply({ embeds: [embed] })

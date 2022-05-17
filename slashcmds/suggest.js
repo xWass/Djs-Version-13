@@ -27,10 +27,14 @@ module.exports = {
         modal.addComponents(first, second);
 
         await interaction.showModal(modal);
+
         const filter = (interaction) => interaction.customId === 'suggestt';
-        interaction.awaitModalSubmit({ filter, time: 300_000 })
-        const a = interaction.fields.getTextInputValue('descrip')
-        const b = interaction.fields.getTextInputValue('descrip2')
-        console.log(a, b)
+
+        interaction.awaitModalSubmit({ filter, time: 150_000 })
+            .then(async (modal) => {
+                const a = modal.fields.getTextInputValue('descrip')
+                const b = modal.fields.getTextInputValue('descrip2')
+                console.log(a, b)
+            })
     }
 }
