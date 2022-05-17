@@ -49,7 +49,6 @@ RAM Usage: ${usedMemMb} MB
 \`\`\`
 `)
             .setFooter(`Diomedes v${config.version}`)
-
         await interaction.reply({ embeds: [embed] })
     }
 }
