@@ -49,7 +49,7 @@ module.exports = {
 
         const filter = (interaction) => interaction.customId === customid;
 
-        
+
         interaction.awaitModalSubmit({ filter, time: 150_000 })
             .then(async (modal) => {
                 const embed = new MessageEmbed()
@@ -61,8 +61,8 @@ module.exports = {
                 let chan = interaction.guild.channels.cache.get("948680525235777576");
 
                 embed.setTitle(`${a}`)
-                embed.setDescription(`Detailed explanation: ${b}`)
-                embed.setFooter({ text: `Suggestion submitted by ${interaction.user.username}`, iconURL: interaction.user.avatarURL() })
+                embed.setDescription(`Detailed explanation: \n${b}`)
+                embed.setFooter({ text: `Suggestion submitted by ${interaction.user.tag}`, iconURL: interaction.user.avatarURL() })
                 embed.setColor("#00ff00")
                 chan.send({ embeds: [embed] });
 
