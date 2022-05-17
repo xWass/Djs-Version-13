@@ -61,7 +61,7 @@ module.exports = {
 
                 embed.setTitle(`${a}`)
                 embed.setDescription(`Detailed explanation: ${b}`)
-                embed.setFooter({ text: `Suggestion submitted by ${interaction.author.username}`, iconURL: interaction.author.avatarURL() })
+                embed.setFooter({ text: `Suggestion submitted by ${interaction.user.username}`, iconURL: interaction.user.avatarURL() })
                 embed.setColor("#00ff00")
                 chan.send({ embeds: [embed] });
 
