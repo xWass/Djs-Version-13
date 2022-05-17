@@ -8,7 +8,7 @@ module.exports = {
 
     async execute(interaction) {
         const modal = new Modal()
-            .setCustomId('suggest')
+            .setCustomId('suggestt')
             .setTitle('Suggestions');
 
         // text input components
@@ -20,17 +20,17 @@ module.exports = {
             .setCustomId('descrip2')
             .setLabel("Enter a longer description here.")
             .setStyle('PARAGRAPH');
-        const userid = new TextInputComponent()
-            .setCustomId('id')
-            .setLabel("Enter your user ID here.")
-            .setStyle('SHORT');
 
         const first = new MessageActionRow().addComponents(shortDescription);
         const second = new MessageActionRow().addComponents(longDescription);
-        const third = new MessageActionRow().addComponents(userid);
 
         modal.addComponents(first, second, third);
 
         await interaction.showModal(modal);
+        const filter = (interaction) => interaction.customId === 'suggestt';
+        interaction.awaitModalSubmit({ filter, time: 300_000 })
+        const a = interaction.fields.getTextInputValue('descrip')
+        const b = interaction.fields.getTextInputValue('descrip2')
+        console.log(a, b)
     }
 }
