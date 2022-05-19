@@ -48,9 +48,9 @@ module.exports = {
         await interaction.showModal(modal);
 
         const filter = (interaction) => interaction.customId === customid;
+        // for some reason bot died and i need a non empty commit so here we are
 
-
-        interaction.awaitModalSubmit({ filter, time: 150_000 })
+        interaction.awaitModalSubmit({ filter, time: 250_000 })
             .then(async (modal) => {
                 const embed = new MessageEmbed()
                 const a = modal.fields.getTextInputValue('descrip')
