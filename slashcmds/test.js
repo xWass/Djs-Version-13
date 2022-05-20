@@ -6,21 +6,41 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('test')
         .setDescription('test')
-        .addSubcommand(sub => sub
-            .setName('user')    
-            .setDescription('test')
-			.addUserOption(option => option.setName('target').setDescription('The user'))
-            .addStringOption(option => option.setName('str').setDescription('The string'))
+        .addSubcommand(sub =>
+            sub
+                .setName('modconfirm')
+                .setDescription('Enables or disables confirmation messages on moderation actions.')
+                .addStringOption((stringOption) =>
+                    stringOption
+                        .setName("modify")
+                        .setDescription("Enable or Disable?")
+                        .addChoice("Enable", "enable")
+                        .addChoice("Disable", "disable")
+                        .setRequired(true)
+                )
         )
-        .addSubcommand(sub => sub
-            .setName('test')
-            .setDescription('test')
-            .addUserOption(option => option.setName('target2').setDescription('The user'))
-            .addStringOption(option => option.setName('str2').setDescription('The string'))
+        .addSubcommand(sub =>
+            sub
+                .setName('prefix')
+                .setDescription('Changes the prefix of the bot in your server.')
+                .addStringOption(option =>
+                    option
+                        .setName('prefix')
+                        .setDescription('The new prefix.')
+                        .setRequired(true)
+                )
         ),
 
     async execute(interaction) {
         console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` interactionCreate with command test`);
-        interaction.reply({ content: "just a test command", ephemeral: true });
+        let chosen = await interaction.options.getSubcommand()
+        if (chosen === 'modconfirm') {
+            const change = interaction.options.getString("modify");
+            interaction.channel.send({ content: `${change}`, ephemeral: true });
+
+        } else {
+            const prefix = interaction.options.getString("prefix");
+            interaction.channel.send({ content: `${prefix}`, ephemeral: true });
+        }
     }
 }
