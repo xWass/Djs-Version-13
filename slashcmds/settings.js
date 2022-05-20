@@ -1,52 +1,38 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageActionRow, MessageButton, MessageEmbed } = require("discord.js");
-const chalk = require("chalk");
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const { MessageEmbed, Modal, MessageActionRow, TextInputComponent, MessageButton } = require('discord.js');
+const chalk = require('chalk');
+
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName("settings")
-        .setDescription("Modify the bot's settings in your guild.")
-
-        .addStringOption((stringOption) => stringOption
-            .setName("setting")
-            .setDescription("Select \"ModConfirm\" to disable confirmation messages on moderation actions.")
-            .addChoice("ModConfirm", "confirms")
-            // .addChoice("Prefix", "prefix")
-            .setRequired(true)
+        .setName('settings')
+        .setDescription('Adjust bot settings.')
+        .addSubcommand(sub =>
+            sub
+                .setName('modconfirm')
+                .setDescription('Enables or disables confirmation messages on moderation actions.')
+                .addStringOption((stringOption) =>
+                    stringOption
+                        .setName("modify")
+                        .setDescription("Enable or Disable?")
+                        .addChoice("Enable", "enable")
+                        .addChoice("Disable", "disable")
+                        .setRequired(true)
+                )
         )
-
-        .addStringOption((stringOption) => stringOption
-            .setName("modify")
-            .setDescription("Enable or Disable?")
-            .addChoice("Enable", "enable")
-            .addChoice("Disable", "disable")
-            .setRequired(true)
+        .addSubcommand(sub =>
+            sub
+                .setName('prefix')
+                .setDescription('Changes the prefix of the bot in your server.')
+                .addStringOption(option =>
+                    option
+                        .setName('prefix')
+                        .setDescription('The new prefix.')
+                        .setRequired(true)
+                )
         ),
-    /*
-    coll is client.db.collection whatever 
-    await coll.updateOne(
-        { guildid: interaction.guild.id },
-        { $set: { 'config.channelid': catt.id, 'config.webhookid': hook.id, 'config.webhooktoken': hook.token } } // or something similar
-    );
-    */
+
     async execute(interaction, client) {
-        console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` interactionCreate with command ban`);
-
-        const change = interaction.options.getString("modify");
-
-
         const embed = new MessageEmbed()
-
-        if (!interaction.member.permissions.has("BAN_MEMBERS")) {
-            embed.setColor("DARK_RED")
-            embed.setDescription("<:Error:949853701504372778> You are not an Administrator!")
-            await interaction.reply({ embeds: [embed], ephemeral: true })
-            return;
-        }
-
-        embed.setColor("GREEN")
-        embed.setTitle(`Update a setting?`)
-        embed.setDescription(`Are you sure you want to update this setting?`)
-
         const row = new MessageActionRow()
             .addComponents(
                 new MessageButton()
@@ -60,11 +46,21 @@ module.exports = {
                     .setLabel("Cancel")
                     .setStyle("DANGER")
             );
-        await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
 
-        const response = await interaction.channel
+        console.log(chalk.greenBright('[EVENT ACKNOWLEDGED]') + ` interactionCreate with command test`);
+        let chosen = await interaction.options.getSubcommand()
+
+
+        if (chosen === 'modconfirm') {
+
+
+            const change = interaction.options.getString("modify");
+            embed.setDescription(`Are you sure you want to update this setting?`)
+            interaction.reply({ embeds: [ embed ], ephemeral: true, components: [row] });
+
+            const response = await interaction.channel
             .awaitMessageComponent({
-                filter: (i) => {
+                filter: (i) => {    
                     row.components[0].setDisabled(true);
                     row.components[1].setDisabled(true);
                     return i.customId === "yes" || i.customId === "no";
@@ -78,7 +74,7 @@ module.exports = {
             row.components[0].setDisabled(true);
             row.components[1].setDisabled(true);
             await interaction.editReply({ components: [row] });
-            await interaction.followUp({ embeds: [embed], ephemeral: true })
+            await response.reply({ embeds: [embed], ephemeral: true })
             return;
         }
 
@@ -90,32 +86,41 @@ module.exports = {
                 await client.db.collection("settings").insertOne({ guildid: id })
             }
             if (change === "enable") {
-                //update to enable here
                 await client.db.collection("settings").updateOne({ guildid: id }, { $set: { enabled: true } })
-
                 embed.setColor("GREEN")
                 embed.setTitle("Setting updated!")
                 embed.setDescription("<:Success:949853804155793450> You will see confirmation messages when you run a moderator command.")
-
-                await interaction.followUp({ embeds: [embed], ephemeral: true });
+                row.components[0].setDisabled(true);
+                row.components[1].setDisabled(true);
+                await interaction.editReply({ components: [row] });    
+                await response.reply({ embeds: [embed], ephemeral: true });
                 return;
             } else if (change === "disable") {
                 await client.db.collection("settings").updateOne({ guildid: id }, { $set: { enabled: false } })
-
-                //update to disable here
                 embed.setColor("GREEN")
                 embed.setTitle("Setting updated!")
                 embed.setDescription("<:Success:949853804155793450> You will no longer see confirmation messages when you run a moderator command.")
-
-                await interaction.followUp({ embeds: [embed], ephemeral: true });
+                row.components[0].setDisabled(true);
+                row.components[1].setDisabled(true);
+                await interaction.editReply({ components: [row] });    
+                await response.reply({ embeds: [embed], ephemeral: true });
                 return;
             }
         } else {
             embed.setColor("GREEN")
             embed.setTitle("Cancelled!")
             embed.setDescription("<:Success:949853804155793450> The command was successfully cancelled")
-            await interaction.followUp({ embeds: [embed], ephemeral: true });
+            row.components[0].setDisabled(true);
+            row.components[1].setDisabled(true);
+            await interaction.editReply({ components: [row] });
+            await response.reply({ embeds: [embed], ephemeral: true });
 
+        }
+
+        } else {
+            const prefix = interaction.options.getString("prefix");
+            interaction.reply({ content: `Hi! This feature is currently in development and is not yet released. Thanks!`, ephemeral: true });
+            // dont forget to add row components
         }
     }
 }
