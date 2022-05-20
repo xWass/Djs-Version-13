@@ -55,11 +55,12 @@ module.exports = {
 
 
             const change = interaction.options.getString("modify");
-            interaction.reply({ content: `${change}`, ephemeral: true, components: [row] });
+            embed.setDescription(`Are you sure you want to update this setting?`)
+            interaction.reply({ embeds: [ embed ], ephemeral: true, components: [row] });
 
             const response = await interaction.channel
             .awaitMessageComponent({
-                filter: (i) => {
+                filter: (i) => {    
                     row.components[0].setDisabled(true);
                     row.components[1].setDisabled(true);
                     return i.customId === "yes" || i.customId === "no";
@@ -85,9 +86,7 @@ module.exports = {
                 await client.db.collection("settings").insertOne({ guildid: id })
             }
             if (change === "enable") {
-                //update to enable here
                 await client.db.collection("settings").updateOne({ guildid: id }, { $set: { enabled: true } })
-
                 embed.setColor("GREEN")
                 embed.setTitle("Setting updated!")
                 embed.setDescription("<:Success:949853804155793450> You will see confirmation messages when you run a moderator command.")
@@ -98,8 +97,6 @@ module.exports = {
                 return;
             } else if (change === "disable") {
                 await client.db.collection("settings").updateOne({ guildid: id }, { $set: { enabled: false } })
-
-                //update to disable here
                 embed.setColor("GREEN")
                 embed.setTitle("Setting updated!")
                 embed.setDescription("<:Success:949853804155793450> You will no longer see confirmation messages when you run a moderator command.")
@@ -122,7 +119,8 @@ module.exports = {
 
         } else {
             const prefix = interaction.options.getString("prefix");
-            interaction.reply({ content: `Hi! This feature is currently in development and is not yet released. Thanks!`, ephemeral: true, components: [row] });
+            interaction.reply({ content: `Hi! This feature is currently in development and is not yet released. Thanks!`, ephemeral: true });
+            // dont forget to add row components
         }
     }
 }
