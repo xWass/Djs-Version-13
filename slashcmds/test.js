@@ -4,10 +4,10 @@ const chalk = require('chalk');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('suggest')
-        .setDescription('Submit a suggestion')
+        .setName('test')
+        .setDescription('test')
         .addSubcommand(sub => sub
-            .setName('user')
+            .setName('user')    
             .setDescription('test'))
 			.addUserOption(option => option.setName('target').setDescription('The user'))
             .addStringOption(option => option.setName('str').setDescription('The string'))
