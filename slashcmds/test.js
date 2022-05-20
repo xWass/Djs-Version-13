@@ -8,9 +8,10 @@ module.exports = {
         .setDescription('test')
         .addSubcommand(sub => sub
             .setName('user')    
-            .setDescription('test'))
+            .setDescription('test')
 			.addUserOption(option => option.setName('target').setDescription('The user'))
             .addStringOption(option => option.setName('str').setDescription('The string'))
+        )
         .addSubcommand(sub => sub
             .setName('test')
             .setDescription('test')
