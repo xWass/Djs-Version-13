@@ -91,7 +91,9 @@ module.exports = {
                 embed.setColor("GREEN")
                 embed.setTitle("Setting updated!")
                 embed.setDescription("<:Success:949853804155793450> You will see confirmation messages when you run a moderator command.")
-
+                row.components[0].setDisabled(true);
+                row.components[1].setDisabled(true);
+                await interaction.editReply({ components: [row] });    
                 await response.reply({ embeds: [embed], ephemeral: true });
                 return;
             } else if (change === "disable") {
@@ -101,7 +103,9 @@ module.exports = {
                 embed.setColor("GREEN")
                 embed.setTitle("Setting updated!")
                 embed.setDescription("<:Success:949853804155793450> You will no longer see confirmation messages when you run a moderator command.")
-
+                row.components[0].setDisabled(true);
+                row.components[1].setDisabled(true);
+                await interaction.editReply({ components: [row] });    
                 await response.reply({ embeds: [embed], ephemeral: true });
                 return;
             }
@@ -109,6 +113,9 @@ module.exports = {
             embed.setColor("GREEN")
             embed.setTitle("Cancelled!")
             embed.setDescription("<:Success:949853804155793450> The command was successfully cancelled")
+            row.components[0].setDisabled(true);
+            row.components[1].setDisabled(true);
+            await interaction.editReply({ components: [row] });
             await response.reply({ embeds: [embed], ephemeral: true });
 
         }
