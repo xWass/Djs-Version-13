@@ -31,7 +31,7 @@ module.exports = {
                 )
         ),
 
-    async execute(interaction) {
+    async execute(interaction, client) {
         const embed = new MessageEmbed()
         const row = new MessageActionRow()
             .addComponents(
