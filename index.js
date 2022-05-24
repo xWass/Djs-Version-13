@@ -78,6 +78,11 @@ for (const file of commandFiles) {
     client.SlashCommands.set(command.data.name, command);
 }
 
+client
+    .on("debug", console.log)
+    .on("warn", console.log)
+client.on("rateLimit", console.log)
+
 client.on('interactionCreate', async interaction => {
     if (!interaction.isCommand()) return;
     let id = interaction.guild.id
